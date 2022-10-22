@@ -11,7 +11,7 @@ body{
 
 main{
   width: 100%;
-  min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   justify-content: center;
   /* align-items: center; */
@@ -21,7 +21,7 @@ a {
   text-decoration: none;
   color: #fff;
   font-weight: 200;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .content-section{
