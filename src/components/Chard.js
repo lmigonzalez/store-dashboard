@@ -5,34 +5,29 @@ import { Chart as chartjs } from 'chart.js/auto';
 
 const LineChard = ({ chartData }) => {
   const options = {
-	scales: {
-		x:{
-			ticks:{
-
-				color: 'white'
-			}
-
-		},
-		y:{
-			ticks:{
-
-				color: 'white'
-			}
-
-		}
-	},
-	tooltips: {
-		bodyFontColor: "red"
-	},
-	responsive: true,
-	maintainAspectRatio: true,
+    scales: {
+      x: {
+        ticks: {
+          color: 'white',
+        },
+      },
+      y: {
+        ticks: {
+          color: 'white',
+        },
+      },
+    },
+    tooltips: {
+      bodyFontColor: 'red',
+    },
+    responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
-		display: true,
+        display: true,
         labels: {
           color: 'white',
         },
-		
       },
     },
   };

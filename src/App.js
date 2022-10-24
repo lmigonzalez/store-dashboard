@@ -4,8 +4,10 @@ import { Route, Routes } from 'react-router-dom';
 import Customers from './pages/Customers';
 import AddNew from './pages/AddNew';
 import Overview from './pages/Overview';
-import Product from './pages/Product';
+import Products from './pages/Products';
 import Orders from './pages/Orders';
+
+import ProductDetails from './pages/ProductDetails';
 
 import Sidebar from './components/Sidebar/Sidebar';
 
@@ -15,11 +17,12 @@ function App() {
       <Sidebar />
       <section className="content-section">
         <Routes>
-          <Route path="/new" element={<AddNew />}></Route>
-          <Route path="/overview" element={<Overview />}></Route>
-          <Route path="/product" element={<Product />}></Route>
-          <Route path="/customers" element={<Customers />}></Route>
-          <Route path="/orders" element={<Orders />}></Route>
+          <Route path="/new" element={<AddNew />} />
+          <Route path="/overview" element={<Overview />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<ProductDetails />}/>
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/orders" element={<Orders />} />
         </Routes>
       </section>
     </main>

@@ -27,8 +27,8 @@ const Sidebar = () => {
           <NavLink to="/overview">
             <AiOutlineBarChart /> Overview
           </NavLink>
-          <NavLink to="/product">
-            <AiOutlineShoppingCart /> Product
+          <NavLink to="/products">
+            <AiOutlineShoppingCart /> Products
           </NavLink>
           <NavLink to="/customers">
             <AiOutlineTeam /> Customers
