@@ -6,9 +6,6 @@ table {
   table-layout: fixed;
 }
 
-tr {
-  font-weight: 300;
-}
 
 th {
 	border-bottom: 0.1rem solid #222831;

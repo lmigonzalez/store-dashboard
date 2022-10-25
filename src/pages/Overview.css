@@ -37,6 +37,11 @@
 	border-radius: 0.5rem;
 }
 
+.body-header div div{
+	font-weight: 300;
+	
+}
+
 .body-header div:nth-child(2){
 	margin: 0 1rem;
 }

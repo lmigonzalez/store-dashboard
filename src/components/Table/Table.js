@@ -42,10 +42,11 @@ const Table = ({ data }) => {
             .map((tr) => {
               return (
                 <tr key={tr.id} onClick={() => productDetails(tr.id)}>
-                  <th>{tr.name}</th>
-                  <th>{tr.quantity}</th>
-                  <th>{tr.price}</th>
-                  <th>{tr.category}</th>
+                  {tableData.header.map((x) => {
+                    if (tr.hasOwnProperty(x.toLowerCase())) {
+                      return <th>{tr[x.toLowerCase()]}</th>;
+                    }
+                  })}
                 </tr>
               );
             })}
@@ -69,3 +70,10 @@ const Table = ({ data }) => {
 };
 
 export default Table;
+
+{
+  /* <th>{tr.name}</th>
+<th>{tr.quantity}</th>
+<th>{tr.price}</th>
+<th>{tr.category}</th> */
+}

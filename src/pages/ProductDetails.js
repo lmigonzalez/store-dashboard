@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LineChard from '../components/Chard';
+import LineChard from '../components/Chard/Chard';
 
 const ProductDetails = () => {
   const [tab, setTab] = useState(1);
@@ -86,12 +86,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div
-            className={
-              tab === 3 ? 'header-information selected' : 'header-information'
-            }
-            onClick={() => switchTab(3)}
-          >
+          <div className="header-information">
             <p>Units Available</p>
             <h2>1,200</h2>
             <div>
@@ -104,7 +99,7 @@ const ProductDetails = () => {
         <div className="body-content">
           {tab === 1 && <LineChard className="chard" chartData={sales} />}
           {tab === 2 && <LineChard className="chard" chartData={sales} />}
-          {tab === 3 && <LineChard className="chard" chartData={sales} />}
+          {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}
         </div>
       </div>
     </section>
