@@ -1,29 +1,46 @@
 import './Table.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 
-const Table = ({ data }) => {
+const Table = ({ data, searching }) => {
   const navigate = useNavigate();
 
   const productDetails = (productId) => {
-    console.log(productId);
     navigate(`/product/${productId}`);
   };
 
-  // const [tableData, setTableData] = useState(data)
-
   const tableData = data;
 
+  // const [tableData, setTableData] = useState(data)
+
   const [pageNumber, setPageNumber] = useState(0);
+  let dataLength = tableData.data.length;
   const usersPerPage = 10;
-  const pagesVisited = pageNumber * usersPerPage;
-  const pageCount = Math.ceil(tableData.data.length / usersPerPage);
+  let pagesVisited = pageNumber * usersPerPage;
+
+  const [pageCount, setPageCount] = useState(
+    Math.ceil(tableData.data.length / usersPerPage)
+  );
+
+  useEffect(() => {
+    ifSearching();
+  }, [searching, dataLength]);
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);
+  };
+
+  const ifSearching = () => {
+    if (searching) {
+      setPageNumber(0);
+      setPageCount(Math.ceil(tableData.data.length / usersPerPage));
+    }
+    if (pageCount < 0) {
+      setPageCount(0);
+    }
   };
 
   return (
@@ -42,9 +59,9 @@ const Table = ({ data }) => {
             .map((tr) => {
               return (
                 <tr key={tr.id} onClick={() => productDetails(tr.id)}>
-                  {tableData.header.map((x) => {
+                  {tableData.header.map((x, index) => {
                     if (tr.hasOwnProperty(x.toLowerCase())) {
-                      return <th>{tr[x.toLowerCase()]}</th>;
+                      return <th key={index}>{tr[x.toLowerCase()]}</th>;
                     }
                   })}
                 </tr>
@@ -63,6 +80,7 @@ const Table = ({ data }) => {
           nextLinkClassName={'nextBttn'}
           disabledClassName={'paginationDisabled'}
           activeClassName={'paginationActive'}
+          forcePage={searching && 0}
         />
       </div>
     </div>
@@ -70,10 +88,3 @@ const Table = ({ data }) => {
 };
 
 export default Table;
-
-{
-  /* <th>{tr.name}</th>
-<th>{tr.quantity}</th>
-<th>{tr.price}</th>
-<th>{tr.category}</th> */
-}

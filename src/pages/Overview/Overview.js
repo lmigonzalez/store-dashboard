@@ -1,6 +1,6 @@
 import './Overview.css';
 import React, { useState } from 'react';
-import LineChard from '../components/Chard/Chard';
+import LineChard from '../../components/Chard/Chard';
 
 const Overview = () => {
   const data = [

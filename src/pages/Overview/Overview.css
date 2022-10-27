@@ -32,7 +32,7 @@
 
 }
 .body-header div{
-	background-color: #393e46;
+	background-color: var(--light-black);
 	width: 33%;
 	border-radius: 0.5rem;
 }
@@ -55,7 +55,7 @@
 }
 
 .header-information.selected{
-	background-color: #7858A6;
+	background-color: var(--purple);
 }
 
 .header-information h2{
@@ -84,7 +84,7 @@
 }
 
 .body-content{
-	background-color: #393e46;
+	background-color: var(--light-black);
 	height: auto;
 	border-radius: 0.5rem;
 	padding: 1rem;

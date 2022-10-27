@@ -6,8 +6,17 @@
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
+:root{
+  --dark-black: #222831;
+  --light-black: #393e46;
+  --purple: #7858A6;
+  --green: #4ECCA3;
+  --red: #B04A4A;
+}
+
+
 body{
-  background-color: #222831;
+  background-color: var(--dark-black);
   color: #fff;
   width: 100%;
 }

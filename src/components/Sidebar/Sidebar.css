@@ -1,7 +1,7 @@
 .sidebar {
   width: 15rem;
   min-height: 100vh;
-  border-right: 3px solid #393e46;
+  border-right: 3px solid var(--light-black);
   position: relative;
 }
 
@@ -16,7 +16,7 @@
 
 .sidebar-title {
   height: 6.25rem;
-  border-bottom: 3px solid #393e46;
+  border-bottom: 3px solid var(--light-black);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,14 +37,14 @@
 
 .links .active {
   border-radius: 0 2rem 2rem 0;
-  background-color: #393e46;
+  background-color: var(--light-black);
 }
 
 .links .active svg {
-  color: #7858a6;
+  color: var(--purple);
 }
 .settings-container {
-  border-top: 3px solid #393e46;
+  border-top: 3px solid var(--light-black);
   padding: 1rem;
   position: absolute;
   bottom: 0;

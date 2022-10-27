@@ -1,13 +1,13 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 
-import Customers from './pages/Customers';
-import AddNew from './pages/AddNew';
-import Overview from './pages/Overview';
-import Products from './pages/Products';
-import Orders from './pages/Orders';
+import Customers from './pages/Customers/Customers';
+import AddNew from './pages/AddNew/AddNew';
+import Overview from './pages/Overview/Overview';
+import Products from './pages/Products/Products';
+import Orders from './pages/Orders/Orders';
 
-import ProductDetails from './pages/ProductDetails';
+import ProductDetails from './pages/Products/ProductDetails';
 
 import Sidebar from './components/Sidebar/Sidebar';
 

@@ -2,20 +2,20 @@ table {
   width: 100%;
   border-spacing: 0;
   border-collapse: separate;
-  background-color: #393e46;
+  background-color: var(--light-black);
   table-layout: fixed;
 }
 
 
 th {
-	border-bottom: 0.1rem solid #222831;
+	border-bottom: 0.1rem solid var(--dark-black);
 	padding: 0.6rem;
 	text-align: center;
 }
 
 
 tbody tr:last-child th {
-	border-bottom: 0.2rem solid #222831;
+	border-bottom: 0.2rem solid var(--dark-black);
 }
 
 tbody th {
@@ -24,7 +24,7 @@ tbody th {
 }
 
 tbody tr:hover{
-	background-color: #222831;
+	background-color: var(--dark-black);
 }
 
 .table-pagination{
@@ -52,7 +52,7 @@ tbody tr:hover{
 	padding: 0.5rem;
 	margin: 0.5rem;
 	border-radius: 0.3rem;
-	color: #222831;
+	color: var(--dark-black);
 	background-color: white;
 	cursor: pointer;
 	text-align: center;
@@ -61,12 +61,12 @@ tbody tr:hover{
   
   .paginationBttns a:hover {
 	color: white;
-	background-color: #B73E3E;
+	background-color: var(--red);
   }
   
   .paginationActive a {
 	color: white;
-	background-color: #B73E3E;
+	background-color: var(--red);
   }
   
   /* .paginationDisabled a {

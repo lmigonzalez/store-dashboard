@@ -1,5 +1,8 @@
+import './ProductDetails.css'
 import React, { useState } from 'react';
-import LineChard from '../components/Chard/Chard';
+import LineChard from '../../components/Chard/Chard';
+
+import { AiOutlineDelete, AiOutlineForm} from "react-icons/ai";
 
 const ProductDetails = () => {
   const [tab, setTab] = useState(1);
@@ -57,6 +60,22 @@ const ProductDetails = () => {
         <h1>graph</h1>
       </div>
       <div className="graph-body">
+        <div className="search-container">
+          <div className="products-options">
+            <select>
+              <option value="Last 7 days">Last 7 days</option>
+              <option value="Last 28 days">Last 28 days</option>
+              <option value="Last 90 days">Last 90 days</option>
+              <option value="Last 365 days">Last 365 days</option>
+              <option value="From the beginning">From the beginning</option>
+            </select>
+            <div>
+              <AiOutlineForm/>
+              <AiOutlineDelete/>
+            </div>
+          </div>
+        </div>
+
         <div className="body-header">
           <div
             className={

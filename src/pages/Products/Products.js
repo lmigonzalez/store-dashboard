@@ -3,13 +3,17 @@ import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import Table from '../components/Table/Table';
+import Table from '../../components/Table/Table';
 
-import { findByName } from '../utils/productsUtils';
+import { findByName } from '../../utils/productsUtils';
 
 const Products = () => {
-  let [selectedCategory, setSelectedCategory] = useState('name');
-  let [keyword, setKeyWord] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('name');
+
+  const [keyword, setKeyWord] = useState('');
+
+  const [searching, setSearching] = useState(false);
+
   const productsData = useSelector((state) => state.products);
 
   const tableData = {
@@ -22,23 +26,30 @@ const Products = () => {
 
   useEffect(() => {
     // findByName(productsData, keyword, selectedCategory);
-  }, []);
+    checkIfSearching();
+  }, [keyword]);
 
   const onSelectCategory = (e) => {
     setSelectedCategory(e.target.value);
-
   };
 
   const onKeyWord = (e) => {
     setKeyWord(e.target.value.toLowerCase());
+  };
+
+  const checkIfSearching = () => {
+    if (keyword.length > 0) {
+      setSearching(true);
+    } else {
+      setSearching(false);
+    }
 
   };
 
+  const d = true;
   return (
     <section className="products-container">
-      <div className="products-header">
-        <h1>Products</h1>
-      </div>
+      <div className="products-header"></div>
       <div className="search-container">
         <div className="search-bar">
           <select name="search" onChange={onSelectCategory}>
@@ -58,7 +69,7 @@ const Products = () => {
       </div>
       <div className="products-body">
         <div className="products-table">
-          <Table data={tableData} />
+          <Table data={tableData} searching={searching} />
         </div>
       </div>
     </section>
