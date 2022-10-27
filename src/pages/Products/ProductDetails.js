@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import LineChard from '../../components/Chard/Chard';
 
 import { AiOutlineDelete, AiOutlineForm} from "react-icons/ai";
+import Delete from '../../components/Delete/Delete';
 
 const ProductDetails = () => {
   const [tab, setTab] = useState(1);
+  const [deleteProduct, setDeleteProduct] = useState(false)
   const data = [
     {
       id: 1,
@@ -54,8 +56,22 @@ const ProductDetails = () => {
   const switchTab = (tabName) => {
     setTab(tabName);
   };
+
+  const onDelete = () =>{
+    setDeleteProduct(!deleteProduct)
+    console.log(deleteProduct)
+    console.log('clicked')
+  }
+  
+  const onCancel = () =>{
+    setDeleteProduct(false)
+    
+  }
+
   return (
     <section className="graph-container">
+      {deleteProduct && <Delete category = {'product'} item={'lenovo legion i7'} onCancel = {onCancel}/>}
+      
       <div className="graph-header">
         <h1>graph</h1>
       </div>
@@ -71,7 +87,7 @@ const ProductDetails = () => {
             </select>
             <div>
               <AiOutlineForm/>
-              <AiOutlineDelete/>
+              <AiOutlineDelete onClick={onDelete}/>
             </div>
           </div>
         </div>
