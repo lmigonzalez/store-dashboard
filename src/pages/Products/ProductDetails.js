@@ -3,11 +3,15 @@ import React, { useState } from 'react';
 import LineChard from '../../components/Chard/Chard';
 
 import { AiOutlineDelete, AiOutlineForm} from "react-icons/ai";
+
+import Edit from '../../components/Edit/Edit';
 import Delete from '../../components/Delete/Delete';
+
 
 const ProductDetails = () => {
   const [tab, setTab] = useState(1);
   const [deleteProduct, setDeleteProduct] = useState(false)
+  const [editProduct, setEditProduct] = useState(false)
   const data = [
     {
       id: 1,
@@ -59,17 +63,24 @@ const ProductDetails = () => {
 
   const onDelete = () =>{
     setDeleteProduct(!deleteProduct)
-    console.log(deleteProduct)
-    console.log('clicked')
+    setEditProduct(false)
+  }
+  
+  const onEdit = () =>{
+    setEditProduct(!editProduct)
+    setDeleteProduct(false)
   }
   
   const onCancel = () =>{
     setDeleteProduct(false)
+    setEditProduct(false)
     
   }
 
   return (
     <section className="graph-container">
+      {editProduct && <Edit onCancel = {onCancel}/>}
+      
       {deleteProduct && <Delete category = {'product'} item={'lenovo legion i7'} onCancel = {onCancel}/>}
       
       <div className="graph-header">
@@ -86,7 +97,7 @@ const ProductDetails = () => {
               <option value="From the beginning">From the beginning</option>
             </select>
             <div>
-              <AiOutlineForm/>
+              <AiOutlineForm onClick={onEdit}/>
               <AiOutlineDelete onClick={onDelete}/>
             </div>
           </div>
