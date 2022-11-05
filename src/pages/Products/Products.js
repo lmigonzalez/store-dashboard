@@ -46,7 +46,6 @@ const Products = () => {
 
   };
 
-  const d = true;
   return (
     <section className="products-container">
       <div className="products-header"></div>
@@ -69,7 +68,7 @@ const Products = () => {
       </div>
       <div className="products-body">
         <div className="products-table">
-          <Table data={tableData} searching={searching} />
+          <Table data={tableData} searching={searching} component={'products'}/>
         </div>
       </div>
     </section>

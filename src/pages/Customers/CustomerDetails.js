@@ -1,17 +1,16 @@
-import './ProductDetails.css'
 import React, { useState } from 'react';
+
 import LineChard from '../../components/Chard/Chard';
 
-import { AiOutlineDelete, AiOutlineForm} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineForm } from 'react-icons/ai';
 
 import Edit from '../../components/Edit/Edit';
 import Delete from '../../components/Delete/Delete';
 
-
-const ProductDetails = () => {
+function CustomerDetails() {
   const [tab, setTab] = useState(1);
-  const [deleteProduct, setDeleteProduct] = useState(false)
-  const [editProduct, setEditProduct] = useState(false)
+  const [deleteCustomer, setDeleteCustomer] = useState(false);
+  const [editCustomer, setEditCustomer] = useState(false);
   const data = [
     {
       id: 1,
@@ -61,28 +60,33 @@ const ProductDetails = () => {
     setTab(tabName);
   };
 
-  const onDelete = () =>{
-    setDeleteProduct(!deleteProduct)
-    setEditProduct(false)
-  }
-  
-  const onEdit = () =>{
-    setEditProduct(!editProduct)
-    setDeleteProduct(false)
-  }
-  
-  const onCancel = () =>{
-    setDeleteProduct(false)
-    setEditProduct(false)
-    
-  }
+  const onDelete = () => {
+    setDeleteCustomer(!deleteCustomer);
+    setEditCustomer(false);
+  };
+
+  const onEdit = () => {
+    setEditCustomer(!editCustomer);
+    setDeleteCustomer(false);
+  };
+
+  const onCancel = () => {
+    setDeleteCustomer(false);
+    setEditCustomer(false);
+  };
 
   return (
     <section className="graph-container">
-      {editProduct && <Edit onCancel = {onCancel} component={'product'}/>}
-      
-      {deleteProduct && <Delete category = {'product'} item={'lenovo legion i7'} onCancel = {onCancel}/>}
-      
+      {editCustomer && <Edit onCancel={onCancel} component={'customer'}/>}
+
+      {deleteCustomer && (
+        <Delete
+          category={'customer'}
+          item={'lenovo legion i7'}
+          onCancel={onCancel}
+        />
+      )}
+
       <div className="graph-header">
         <h1>graph</h1>
       </div>
@@ -97,8 +101,8 @@ const ProductDetails = () => {
               <option value="From the beginning">From the beginning</option>
             </select>
             <div>
-              <AiOutlineForm onClick={onEdit}/>
-              <AiOutlineDelete onClick={onDelete}/>
+              <AiOutlineForm onClick={onEdit} />
+              <AiOutlineDelete onClick={onDelete} />
             </div>
           </div>
         </div>
@@ -110,11 +114,11 @@ const ProductDetails = () => {
             }
             onClick={() => switchTab(1)}
           >
-            <p>Total Sold</p>
-            <h2>$7,000.00</h2>
+            <p>Total Spent</p>
+            <h2>$6,500.00</h2>
             <div>
               <p>+14.2%</p>
-              <p>+22,870.00 this year</p>
+              <p>$5,070.00 last 365 days</p>
             </div>
           </div>
 
@@ -124,20 +128,19 @@ const ProductDetails = () => {
             }
             onClick={() => switchTab(2)}
           >
-            <p>Sold Units</p>
-            <h2>545</h2>
+            <p>Sold Orders</p>
+            <h2>210</h2>
             <div>
               <p>+6.2%</p>
-              <p>+1,765 this year</p>
+              <p>+80 last 365 days</p>
             </div>
           </div>
 
           <div className="header-information">
-            <p>Units Available</p>
-            <h2>1,200</h2>
+            <p>Customer Since</p>
+            <h2>Jul, 25 2020</h2>
             <div>
-              <p>+15.2%</p>
-              <p>+825 this year</p>
+              <p>2 years and 10 months</p>
             </div>
           </div>
         </div>
@@ -150,6 +153,6 @@ const ProductDetails = () => {
       </div>
     </section>
   );
-};
+}
 
-export default ProductDetails;
+export default CustomerDetails;

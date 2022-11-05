@@ -69,13 +69,11 @@ const AddNew = () => {
       );
     }
 
-    if(e.target.name === 'clientName'){
+    if (e.target.name === 'clientName') {
       setClientNameSuggestions(() =>
-      orderClientNameSuggestion(e.target.value, clientNameSuggestionsValues)
-    );
+        orderClientNameSuggestion(e.target.value, clientNameSuggestionsValues)
+      );
     }
-
-    // console.log(findSuggestion(e.target.value))
   };
 
   const onProductChange = (e) => {

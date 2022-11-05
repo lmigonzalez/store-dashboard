@@ -8,6 +8,7 @@ import Products from './pages/Products/Products';
 import Orders from './pages/Orders/Orders';
 
 import ProductDetails from './pages/Products/ProductDetails';
+import CustomerDetails from './pages/Customers/CustomerDetails';
 
 import Sidebar from './components/Sidebar/Sidebar';
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetails />}/>
           <Route path="/customers" element={<Customers />} />
+          <Route path="/customer/:id" element={<CustomerDetails />} />
           <Route path="/orders" element={<Orders />} />
         </Routes>
       </section>

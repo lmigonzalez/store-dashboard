@@ -8,7 +8,6 @@ export  const orderProductNameSuggestion = (searchValue, arrayValues) => {
       let newString = n.split(" ").join("")
       let newValue = searchValue.split(" ").join("")
       if (newString.toLowerCase().trim().includes(newValue.toLowerCase().trim())) {
-        console.log(n)
         array.push(n);
       }
     });
@@ -28,7 +27,6 @@ export  const orderProductNameSuggestion = (searchValue, arrayValues) => {
       let newString = n.split(" ").join("")
       let newValue = searchValue.split(" ").join("")
       if (newString.toLowerCase().trim().includes(newValue.toLowerCase().trim())) {
-        console.log(n)
         array.push(n);
       }
     });

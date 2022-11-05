@@ -2,7 +2,7 @@ import './Edit.css';
 
 import React from 'react';
 
-const Edit = ({ onCancel }) => {
+const Edit = ({ onCancel, component }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     onCancel();

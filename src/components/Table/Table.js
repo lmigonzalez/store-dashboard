@@ -5,12 +5,8 @@ import ReactPaginate from 'react-paginate';
 
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 
-const Table = ({ data, searching }) => {
+const Table = ({ data, searching, component }) => {
   const navigate = useNavigate();
-
-  const productDetails = (productId) => {
-    navigate(`/product/${productId}`);
-  };
 
   const tableData = data;
 
@@ -28,6 +24,20 @@ const Table = ({ data, searching }) => {
   useEffect(() => {
     ifSearching();
   }, [searching, dataLength]);
+
+  const componentUsingTable = (id) => {
+    if (component === 'products') {
+      navigate(`/product/${id}`);
+
+      console.log('products');
+    } else if (component === 'customers') {
+      navigate(`/customer/${id}`);
+      console.log('customers');
+    } else if (component === 'orders') {
+      // navigate(`/order/${id}`);
+      console.log('orders');
+    }
+  };
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);
@@ -58,7 +68,7 @@ const Table = ({ data, searching }) => {
             .slice(pagesVisited, pagesVisited + usersPerPage)
             .map((tr) => {
               return (
-                <tr key={tr.id} onClick={() => productDetails(tr.id)}>
+                <tr key={tr.id} onClick={() => componentUsingTable(tr.id)}>
                   {tableData.header.map((x, index) => {
                     if (tr.hasOwnProperty(x.toLowerCase())) {
                       return <th key={index}>{tr[x.toLowerCase()]}</th>;
