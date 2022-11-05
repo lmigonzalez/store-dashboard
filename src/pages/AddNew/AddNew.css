@@ -1,0 +1,144 @@
+.add-container {
+  margin: 0 2rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* background-color: blue; */
+}
+.add-header {
+  min-height: 6.25rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.add-tabs {
+  /* background-color: aqua; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.add-tabs button {
+  width: 33.3%;
+  height: 2rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1.2rem;
+  background-color: var(--light-black);
+}
+
+.add-tabs button:nth-child(1) {
+  border-radius: 0.3rem 0 0 0.3rem;
+}
+
+.add-tabs button:nth-child(2) {
+  margin: 0 0.3rem;
+}
+
+.add-tabs button:nth-child(3) {
+  border-radius: 0 0.3rem 0.3rem 0;
+}
+
+.add-tabs .active {
+  background-color: var(--purple);
+}
+
+.add-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--light-black);
+  padding: 3rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.add-body form {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 37.5rem;
+  max-width: 100%;
+}
+
+.add-body form input {
+  width: 100%;
+  height: 2rem;
+  border: none;
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  border-radius: 0.2rem;
+}
+
+.add-body form select {
+  width: 100%;
+  height: 2rem;
+  border: none;
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  border-radius: 0.2rem;
+}
+
+.child-input-container {
+  width: 100%;
+  /* background-color: aqua; */
+  display: flex;
+  justify-content: space-around;
+}
+
+.child-input-container input:nth-child(1) {
+  margin-right: 0.3rem;
+}
+
+.add-button-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.add-button-container button {
+  height: 2rem;
+  border-radius: 0.2rem;
+  border-style: none;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.add-button-container button:nth-child(1) {
+  margin-bottom: 0.5rem;
+  background-color: var(--green);
+}
+
+.add-button-container button:nth-child(2) {
+  background-color: var(--red);
+}
+
+.suggest-list {
+  background-color: var(--light-black);
+  position: absolute;
+  z-index: 20;
+  border-radius: 0.2rem;
+  box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+}
+
+.suggest-list ul {
+  list-style: none;
+  padding: 0.5rem 1rem;
+}
+
+.suggest-list li {
+  margin: 0.3rem 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.suggest-list li:hover{
+	color: var(--purple);
+}
