@@ -17,7 +17,8 @@ import {
 const Sidebar = () => {
 
   return (
-    <div className="sidebar">
+    <div className='sidebar-container'>
+      <div className="sidebar">
       <div className="sidebar-title">
         <h1>Storename</h1>
       </div>
@@ -53,6 +54,8 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
+    </div>
+    
   );
 };
 

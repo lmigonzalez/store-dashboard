@@ -15,7 +15,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 function App() {
   return (
     <main>
-      <Sidebar />
+      <Sidebar/>
       <section className="content-section">
         <Routes>
           <Route path="/new" element={<AddNew />} />

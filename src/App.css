@@ -26,8 +26,12 @@ main{
   max-height: 100vh;
   display: flex;
   justify-content: center;
+  padding-left: 15rem;
   /* align-items: center; */
+
+
 }
+
 
 a {
   text-decoration: none;
