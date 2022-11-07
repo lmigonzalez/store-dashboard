@@ -118,6 +118,15 @@
   background-color: var(--red);
 }
 
+.product-list{
+  list-style: none;
+}
+
+.product-list li{
+  margin: 0.5rem 0;
+  border-bottom: dashed white 2px;
+}
+
 .suggest-list {
   background-color: var(--light-black);
   position: absolute;

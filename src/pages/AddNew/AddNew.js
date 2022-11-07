@@ -9,11 +9,14 @@ import { orderClientNameSuggestion } from '../../utils/searchSuggestions';
 const AddNew = () => {
   const [activeTab, setActiveTab] = useState('order');
 
+  const [productForms, setProductForms] = useState(3);
+  // let productForms = 2
+
+  // const orderListInitialValues = numberOfOrders()
+
   const orderInitialValues = {
-    productName: '',
     clientName: '',
-    amount: '',
-    total: '',
+    // orders: numberOfOrders(),
     date: moment().format('YYYY-MM-DD'),
   };
 
@@ -50,12 +53,37 @@ const AddNew = () => {
     'Joaquin',
   ];
 
+  const ordersInitial = [
+    {
+      productName: '',
+      amount: '',
+      total: '',
+    },
+  ];
+
+  const [orderValues, setOrderValues] = useState(orderInitialValues);
+  const [orders, setOrders] = useState(numberOfOrders());
+
   const [productNameSuggestions, setProductNameSuggestions] = useState([]);
   const [clientNameSuggestions, setClientNameSuggestions] = useState([]);
 
-  const [orderValues, setOrderValues] = useState(orderInitialValues);
   const [productValues, setProductValues] = useState(productInitialValues);
   const [customerValues, setCustomerValues] = useState(customerInitialValues);
+
+  function numberOfOrders() {
+    let array = [];
+    let i = productForms;
+    while (i > 0) {
+      array.push({
+        productName: '',
+        amount: '',
+        total: '',
+      });
+      i--;
+    }
+
+    return array;
+  }
 
   const onOrderChange = (e) => {
     setOrderValues({
@@ -76,6 +104,23 @@ const AddNew = () => {
     }
   };
 
+  const onOrderProductChange = (i) => (e) => {
+    let list = [...orders];
+
+    list[i][e.target.name] = e.target.value;
+    setOrders(list);
+
+    console.log(orders);
+
+    // orders.map((values, index) => {
+    //   if (index === i) {
+    //     let newValue = { ...values, [e.target.name]: e.target.value };
+    //     setOrders([...orders, (orders[i] = newValue)]);
+    //   }
+    //   console.log(values)
+    // });
+  };
+
   const onProductChange = (e) => {
     setProductValues({
       ...productValues,
@@ -90,8 +135,14 @@ const AddNew = () => {
     });
   };
 
+  const addProduct = () => {};
+
   const onOrderSubmit = (e) => {
     e.preventDefault();
+    setOrderValues({
+      ...orderValues,
+      orders,
+    });
     console.log(orderValues);
   };
 
@@ -120,6 +171,8 @@ const AddNew = () => {
     });
     setClientNameSuggestions([]);
   };
+
+  // console.log(orderValues);
 
   return (
     <section className="add-container">
@@ -150,33 +203,6 @@ const AddNew = () => {
             <div>
               <input
                 type="text"
-                placeholder="Product Name"
-                value={orderValues.productName}
-                name="productName"
-                onChange={onOrderChange}
-              />
-              <div className="suggest-list">
-                {productNameSuggestions.length > 0 && (
-                  <ul>
-                    {productNameSuggestions.map((value, i) => {
-                      return (
-                        <li
-                          onClick={() =>
-                            onOrderProductNameSuggestionSelected(value)
-                          }
-                          key={i}
-                        >
-                          {value}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-            </div>
-            <div>
-              <input
-                type="text"
                 placeholder="Client Name"
                 value={orderValues.clientName}
                 name="clientName"
@@ -201,23 +227,57 @@ const AddNew = () => {
                 )}
               </div>
             </div>
-
-            <div className="child-input-container">
-              <input
-                type="number"
-                placeholder="Amount"
-                value={orderValues.amount}
-                name="amount"
-                onChange={onOrderChange}
-              />
-              <input
-                type="number"
-                placeholder="Total"
-                value={orderValues.total}
-                name="total"
-                onChange={onOrderChange}
-              />
-            </div>
+            <ul className="product-list">
+              {orders.map((prod, i) => {
+                return (
+                  <li key={i}>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Product Name"
+                        value={prod.productName}
+                        name="productName"
+                        onChange={onOrderProductChange(i)}
+                      />
+                      <div className="suggest-list">
+                        {productNameSuggestions.length > 0 && (
+                          <ul>
+                            {productNameSuggestions.map((value, i) => {
+                              return (
+                                <li
+                                  onClick={() =>
+                                    onOrderProductNameSuggestionSelected(value)
+                                  }
+                                  key={i}
+                                >
+                                  {value}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                    <div className="child-input-container">
+                      <input
+                        type="number"
+                        placeholder="Amount"
+                        value={prod.amount}
+                        name="amount"
+                        onChange={onOrderProductChange(i)}
+                      />
+                      <input
+                        type="number"
+                        placeholder="Total"
+                        value={prod.total}
+                        name="total"
+                        onChange={onOrderProductChange(i)}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
 
             <input
               type="date"
@@ -227,6 +287,7 @@ const AddNew = () => {
               onChange={onOrderChange}
             />
             <div className="add-button-container">
+              {/* <button onClick={addProduct}>Add Product</button> */}
               <button type="submit">Add Order</button>
               <button>Cancel</button>
             </div>
