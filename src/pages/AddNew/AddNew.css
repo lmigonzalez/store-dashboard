@@ -122,6 +122,25 @@
   list-style: none;
 }
 
+.add-product-btn{
+  /* background-color: blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+
+}
+
+.add-product-btn svg{
+  font-size: 2rem;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.add-product-btn svg:hover{
+  color: var(--green);
+}
+
 .product-list li{
   margin: 0.5rem 0;
   border-bottom: dashed white 2px;
