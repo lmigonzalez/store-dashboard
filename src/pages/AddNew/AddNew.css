@@ -118,8 +118,21 @@
   background-color: var(--red);
 }
 
+.products-list{
+  list-style: none;
+}
+
+.products-list li{
+  margin: 0.5rem 0;
+  border-bottom: dashed white 2px;
+}
+
 .product-list{
   list-style: none;
+}
+
+.product-list li{
+  margin: 0.5rem 0;
 }
 
 .add-product-btn{
@@ -141,10 +154,6 @@
   color: var(--green);
 }
 
-.product-list li{
-  margin: 0.5rem 0;
-  border-bottom: dashed white 2px;
-}
 
 .suggest-list {
   background-color: var(--light-black);
