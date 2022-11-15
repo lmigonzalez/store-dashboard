@@ -145,7 +145,7 @@ const initialState = [
   ]
 
 export const productsSlice = createSlice({
-	name: 'counter',
+	name: 'products',
 	initialState,
 	reducers:{
 		increment: (state) =>{

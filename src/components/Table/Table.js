@@ -34,7 +34,7 @@ const Table = ({ data, searching, component }) => {
       navigate(`/customer/${id}`);
       console.log('customers');
     } else if (component === 'orders') {
-      // navigate(`/order/${id}`);
+      navigate(`/order/${id}`);
       console.log('orders');
     }
   };

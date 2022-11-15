@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Customers from './pages/Customers/Customers';
@@ -9,6 +10,7 @@ import Orders from './pages/Orders/Orders';
 
 import ProductDetails from './pages/Products/ProductDetails';
 import CustomerDetails from './pages/Customers/CustomerDetails';
+import OrderDetails from './pages/Orders/OrderDetails'
 
 import Sidebar from './components/Sidebar/Sidebar';
 
@@ -25,6 +27,7 @@ function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/customer/:id" element={<CustomerDetails />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
         </Routes>
       </section>
     </main>

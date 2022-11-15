@@ -96,7 +96,7 @@ const AddOrder = () => {
 
     list[i][e.target.name] = e.target.value;
     setOrders(list);
-    console.log(orders);
+
   };
 
   const addProduct = () => {
@@ -204,6 +204,7 @@ const AddOrder = () => {
                     value={prod.amount}
                     name="amount"
                     onChange={onOrderProductChange(i)}
+                    onWheel={() => document.activeElement.blur()}
                   />
                   <input
                     type="number"
@@ -211,6 +212,7 @@ const AddOrder = () => {
                     value={prod.price}
                     name="price"
                     onChange={onOrderProductChange(i)}
+                    onWheel={() => document.activeElement.blur()}
                   />
                 </div>
               </li>

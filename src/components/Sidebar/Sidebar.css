@@ -47,6 +47,7 @@
   background-color: var(--light-black);
 }
 
+
 .links .active svg {
   color: var(--purple);
 }
