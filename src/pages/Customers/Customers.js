@@ -1,6 +1,5 @@
-import './Customers.css'
-
 import React, {useState, useEffect} from 'react'
+import customersStyles from './Customers.module.css'
 import { useSelector } from 'react-redux';
 
 import { findByName } from '../../utils/productsUtils';
@@ -47,10 +46,12 @@ const Customers = () => {
 
 
   return (
-    <section className="customers-container">
-      <div className="customers-header"></div>
-      <div className="search-container">
-        <div className="search-bar">
+    <section className={customersStyles.customers_container}>
+      <div className={customersStyles.customers_header}>
+        <h2>Customers: {560}</h2>
+      </div>
+      <div className={customersStyles.search_container}>
+        <div className={customersStyles.search_bar}>
           <select name="search" onChange={onSelectCategory}>
             <option value="name">name</option>
             <option value="email">email</option>
@@ -67,8 +68,8 @@ const Customers = () => {
           />
         </div>
       </div>
-      <div className="customers-body">
-        <div className="customers-table">
+      <div className={customersStyles.customers_body}>
+        <div className={customersStyles.customers_table}>
           <Table data={tableData} searching={searching} component={'customers'}/>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import './Table.css';
+import tableStyles from './Table.module.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
@@ -14,7 +14,7 @@ const Table = ({ data, searching, component }) => {
 
   const [pageNumber, setPageNumber] = useState(0);
   let dataLength = tableData.data.length;
-  const usersPerPage = 10;
+  const usersPerPage = 20;
   let pagesVisited = pageNumber * usersPerPage;
 
   const [pageCount, setPageCount] = useState(
@@ -25,17 +25,14 @@ const Table = ({ data, searching, component }) => {
     ifSearching();
   }, [searching, dataLength]);
 
-  const componentUsingTable = (id) => {
+  const componentUsingTable = (id, name) => {
+    localStorage.setItem('subjectName', name);
     if (component === 'products') {
       navigate(`/product/${id}`);
-
-      console.log('products');
     } else if (component === 'customers') {
       navigate(`/customer/${id}`);
-      console.log('customers');
     } else if (component === 'orders') {
       navigate(`/order/${id}`);
-      console.log('orders');
     }
   };
 
@@ -55,7 +52,7 @@ const Table = ({ data, searching, component }) => {
 
   return (
     <div>
-      <table>
+      <table className={tableStyles.table}>
         <thead>
           <tr>
             {tableData.header.map((th, index) => {
@@ -68,10 +65,13 @@ const Table = ({ data, searching, component }) => {
             .slice(pagesVisited, pagesVisited + usersPerPage)
             .map((tr) => {
               return (
-                <tr key={tr.id} onClick={() => componentUsingTable(tr.id)}>
+                <tr
+                  key={tr.id}
+                  onClick={() => componentUsingTable(tr.id, tr.name)}
+                >
                   {tableData.header.map((x, index) => {
                     if (tr.hasOwnProperty(x.toLowerCase())) {
-                      return <th key={index}>{tr[x.toLowerCase()]}</th>;
+                      return <td key={index}>{tr[x.toLowerCase()]}</td>;
                     }
                   })}
                 </tr>
@@ -79,17 +79,17 @@ const Table = ({ data, searching, component }) => {
             })}
         </tbody>
       </table>
-      <div className="table-pagination">
+      <div className={tableStyles.table_pagination}>
         <ReactPaginate
           previousLabel={<AiOutlineDoubleLeft />}
           nextLabel={<AiOutlineDoubleRight />}
           pageCount={pageCount}
           onPageChange={changePage}
-          containerClassName={'paginationBttns'}
-          previousLinkClassName={'previousBttn'}
-          nextLinkClassName={'nextBttn'}
-          disabledClassName={'paginationDisabled'}
-          activeClassName={'paginationActive'}
+          containerClassName={tableStyles.paginationBttns}
+          previousLinkClassName={tableStyles.previousBttn}
+          nextLinkClassName={tableStyles.nextBttn}
+          disabledClassName={tableStyles.paginationDisabled}
+          activeClassName={tableStyles.paginationActive}
           forcePage={searching && 0}
         />
       </div>

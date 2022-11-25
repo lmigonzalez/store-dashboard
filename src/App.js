@@ -1,6 +1,6 @@
 import './App.css';
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import Customers from './pages/Customers/Customers';
 import AddNew from './pages/AddNew/AddNew';
@@ -13,8 +13,18 @@ import CustomerDetails from './pages/Customers/CustomerDetails';
 import OrderDetails from './pages/Orders/OrderDetails'
 
 import Sidebar from './components/Sidebar/Sidebar';
+import Footer from './components/Footer/Footer';
 
 function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() =>{
+    console.log(location.pathname)
+    if(location.pathname === '/'){
+      navigate('/new')
+    }
+  }, [])
   return (
     <main>
       <Sidebar/>
@@ -29,6 +39,7 @@ function App() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/order/:id" element={<OrderDetails />} />
         </Routes>
+        <Footer/>
       </section>
     </main>
   );

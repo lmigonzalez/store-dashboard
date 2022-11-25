@@ -1,10 +1,8 @@
 export const findByName = (data, match, selected) => {
   let array = [];
-
-  
   data.map((value) => {
-    console.log(selected);
-    console.log(value);
+    // console.log(selected);
+    // console.log(value);
   
     let newValue = value[selected].toString().toLowerCase().split(' ').join('');
     let newMatch = match.toString().toLowerCase().split(' ').join('');

@@ -82,12 +82,12 @@ const Receipt = ({ receipt }) => {
           </div>
         </div>
       </div>
-
+{/* 
       <div className="receipt-footer">
         <h2>THANK YOU</h2>
         <p>Lucas Fashion</p>
         <p>786-885-7844</p>
-      </div>
+      </div> */}
     </div>
   );
 };

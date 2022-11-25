@@ -1,4 +1,4 @@
-import './Overview.css';
+import overviewStyles from './Overview.module.css';
 import React, { useState } from 'react';
 import LineChard from '../../components/Chard/Chard';
 
@@ -66,7 +66,7 @@ const Overview = () => {
       month: 'Jun',
       sales: 587,
     },
-  ]
+  ];
 
   const ordersData = [
     {
@@ -99,7 +99,7 @@ const Overview = () => {
       month: 'Jun',
       sales: 587,
     },
-  ]
+  ];
 
   const [tab, setTab] = useState(1);
 
@@ -146,20 +146,29 @@ const Overview = () => {
     ],
   });
 
-
-
   return (
-    <section className="graph-container">
-      <div className="graph-header">
-        <h1>Overview</h1>
+    <section className={overviewStyles.graph_container}>
+      <div className={overviewStyles.graph_header}>
+        <div className={overviewStyles.header}>
+          <select id={overviewStyles.select}>
+            <option value="Last 7 days">Last 7 days</option>
+            <option value="Last 28 days">Last 28 days</option>
+            <option value="Last 90 days">Last 90 days</option>
+            <option value="Last 365 days">Last 365 days</option>
+            <option value="From the beginning">From the beginning</option>
+          </select>
+          <div>
+            From: Nov 17 2022 - To: Nov 24 2022
+          </div>
+        </div>
       </div>
-      <div className="graph-body">
-        <div className="body-header">
+      <div className={overviewStyles.graph_body}>
+        <div className={overviewStyles.body_header}>
           <div
             className={
               tab === 1
-                ? 'header-information selected'
-                : 'header-information'
+                ? `${overviewStyles.header_information} ${overviewStyles.selected}`
+                : overviewStyles.header_information
             }
             onClick={() => switchTab(1)}
           >
@@ -174,8 +183,8 @@ const Overview = () => {
           <div
             className={
               tab === 2
-                ? 'header-information selected'
-                : 'header-information'
+                ? `${overviewStyles.header_information} ${overviewStyles.selected}`
+                : overviewStyles.header_information
             }
             onClick={() => switchTab(2)}
           >
@@ -190,8 +199,8 @@ const Overview = () => {
           <div
             className={
               tab === 3
-                ? 'header-information selected'
-                : 'header-information'
+                ? `${overviewStyles.header_information} ${overviewStyles.selected}`
+                : overviewStyles.header_information
             }
             onClick={() => switchTab(3)}
           >
@@ -204,21 +213,13 @@ const Overview = () => {
           </div>
         </div>
 
-        <div className="body-content">
-          {tab === 1 && (
-            <LineChard className="chard" chartData={sales} />
-            )}
-          {tab === 2 && (
-            <LineChard className="chard" chartData={customers} />
-            
-            )}
-          {tab === 3 && (
-            <LineChard className="chard" chartData={orders} />
-          )}
+        <div className={overviewStyles.body_content}>
+          {tab === 1 && <LineChard className="chard" chartData={sales} />}
+          {tab === 2 && <LineChard className="chard" chartData={customers} />}
+          {tab === 3 && <LineChard className="chard" chartData={orders} />}
         </div>
       </div>
     </section>
-   
   );
 };
 

@@ -1,13 +1,15 @@
-import './AddOrder.css';
-
 import React, { useState, useRef, useEffect } from 'react';
+import addOrderStyles from './AddOrder.module.css';
+import axios from 'axios';
+import {saveAs} from 'file-saver'
 import moment from 'moment';
-
+import { AiOutlineDownload } from "react-icons/ai";
 import { orderProductNameSuggestion } from '../../../utils/searchSuggestions';
 import { orderClientNameSuggestion } from '../../../utils/searchSuggestions';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 import Receipt from '../Receipt/Receipt';
+
 
 const AddOrder = () => {
   const ref = useRef();
@@ -106,7 +108,32 @@ const AddOrder = () => {
     ]);
   };
 
-  const onOrderSubmit = (e) => {
+  function createPDF(){
+    axios.post('http://localhost:3032/pdf', orderValues)
+    .then(res=>{
+      console.log(res)
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
+
+ const printTickets = async() => {
+    const { data } = await getTicketsPdf()
+    console.log(data)
+    const blob = new Blob([data], { type: 'application/pdf' })
+    saveAs(blob, "tickets.pdf")
+  }
+
+ const getTicketsPdf = async() => {
+    return axios.get('http://localhost:3032/getPdf', {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      responseType: 'arraybuffer'
+    })
+  }
+
+  const onOrderSubmit = async (e) => {
     e.preventDefault();
     setOrderValues({
       ...orderValues,
@@ -119,8 +146,10 @@ const AddOrder = () => {
     });
 
     setShowReceipt(!showReceipt)
-    console.log(showReceipt)
+
+
   };
+
 
   const onOrderProductNameSuggestionSelected = (value) => {
     setOrderValues({
@@ -138,8 +167,12 @@ const AddOrder = () => {
     setClientNameSuggestions([]);
   };
 
+  const downloadPDF = async() =>{
+    await createPDF()
+    printTickets()
+  }
   return (
-    <div>
+    <div className={addOrderStyles.add_order_container}>
       <form onSubmit={onOrderSubmit}>
         <div>
           <input
@@ -166,7 +199,7 @@ const AddOrder = () => {
             )}
           </div>
         </div>
-        <ul className= {orders.length > 1 ? "products-list": "product-list" }>
+        <ul className= {orders.length > 1 ? addOrderStyles.products_list: addOrderStyles.product_list}>
           {orders.map((prod, i) => {
             return (
               <li key={i}>
@@ -197,7 +230,7 @@ const AddOrder = () => {
                     )}
                   </div>
                 </div>
-                <div className="child-input-container">
+                <div className={addOrderStyles.child_input_container}>
                   <input
                     type="number"
                     placeholder="Amount"
@@ -227,10 +260,10 @@ const AddOrder = () => {
           name="date"
           onChange={onOrderChange}
         />
-        <div className="add-product-btn">
+        <div className={addOrderStyles.add_product_btn}>
           {<AiOutlinePlusCircle onClick={addProduct} />}
         </div>
-        <div className="add-button-container">
+        <div className={addOrderStyles.add_button_container}>
           <button type="submit">Add Order</button>
           <button>Cancel</button>
         </div>
@@ -247,6 +280,9 @@ const AddOrder = () => {
               maxWidth: '850px',
             }}
           >
+            <div className='download-pdf'>
+              <button onClick={downloadPDF}> <AiOutlineDownload/> Download</button>
+            </div>
             <Receipt receipt={receipt} />
           </div>
         </div>

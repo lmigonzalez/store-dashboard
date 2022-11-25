@@ -1,4 +1,4 @@
-.graph-container{
+.graph_container{
 	margin: 0 2rem;
 	height: 100vh;
 	display: flex;
@@ -6,48 +6,64 @@
 	/* background-color: blue; */
 	position: relative;
 }
-.graph-header{
+.graph_header{
 	min-height: 6.25rem;
 	display: flex;
-	justify-content: flex-start;
+	/* justify-content: flex-start; */
 	align-items: center;
 	margin-bottom: 0.5rem;
+	/* background-color: blue; */
 }
 
-.graph-header h1{
+.graph_header h1{
 	font-size: 2rem;
 }
 
-.graph-body{
+.header{
+	width: 100%;
+	font-size: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.header select{
+	background-color: transparent;
+	color: #fff;
+	text-align: center;
+}
+
+
+.graph_body{
 	width: 100%;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 }
 
-.body-header{
+.body_header{
 	/* max-height: 15rem; */
 	height: auto;
 	margin-bottom: 1rem;
 	display: flex;
 
 }
-.body-header div{
+.body_header div{
 	background-color: var(--light-black);
 	width: 33%;
 	border-radius: 0.5rem;
 }
 
-.body-header div div{
+.body_header div div{
 	font-weight: 300;
 	
 }
 
-.body-header div:nth-child(2){
+.body_header div:nth-child(2){
 	margin: 0 1rem;
 }
 
-.header-information{
+.header_information{
 	padding: 1rem;
 	display: flex;
 	flex-direction: column;
@@ -55,23 +71,23 @@
 	cursor: pointer;
 }
 
-.header-information.selected{
+.header_information.selected{
 	background-color: var(--purple);
 }
 
-.header-information h2{
+.header_information h2{
 	margin: 0.5rem 0;
 }
 
-.header-information > p{
+.header_information > p{
 	margin: 1rem 0;
 }
 
-.header-information p:nth-child(){
+.header_information p:nth-child(){
 	font-size: 1.3rem;
 }
 
-.header-information div{
+.header_information div{
 	width: auto;
 	display: flex;
 	align-items: flex-end;
@@ -80,11 +96,11 @@
 	background-color: transparent;
 }
 
-.header-information div p:nth-child(1){
+.header_information div p:nth-child(1){
 	margin-right: 1rem;
 }
 
-.body-content{
+.body_content{
 	background-color: var(--light-black);
 	height: auto;
 	border-radius: 0.5rem;

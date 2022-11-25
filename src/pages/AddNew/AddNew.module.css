@@ -1,11 +1,11 @@
-.add-container {
+.add_container {
   margin: 0 2rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
   /* background-color: blue; */
 }
-.add-header {
+.add_header {
   min-height: 6.25rem;
   display: flex;
   justify-content: flex-start;
@@ -13,17 +13,19 @@
   margin-bottom: 0.5rem;
 }
 
-.add-tabs {
+.add_tabs {
   /* background-color: aqua; */
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   margin-bottom: 1rem;
+  width: 100%;
+
 }
 
-.add-tabs button {
+.add_tabs button {
   width: 33.3%;
-  height: 2rem;
+  height: 2.5rem;
   outline: none;
   border: none;
   cursor: pointer;
@@ -32,23 +34,23 @@
   background-color: var(--light-black);
 }
 
-.add-tabs button:nth-child(1) {
+.add_tabs button:nth-child(1) {
   border-radius: 0.3rem 0 0 0.3rem;
 }
 
-.add-tabs button:nth-child(2) {
+.add_tabs button:nth-child(2) {
   margin: 0 0.3rem;
 }
 
-.add-tabs button:nth-child(3) {
+.add_tabs button:nth-child(3) {
   border-radius: 0 0.3rem 0.3rem 0;
 }
 
-.add-tabs .active {
+.add_tabs .active {
   background-color: var(--purple);
 }
 
-.add-body {
+.add_body {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -58,7 +60,7 @@
   border-radius: 0.5rem;
 }
 
-.add-body form {
+.add_body form {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -66,7 +68,7 @@
   max-width: 100%;
 }
 
-.add-body form input {
+.add_body form input {
   width: 100%;
   height: 2rem;
   border: none;
@@ -75,7 +77,7 @@
   border-radius: 0.2rem;
 }
 
-.add-body form select {
+.add_body form select {
   width: 100%;
   height: 2rem;
   border: none;
@@ -84,24 +86,24 @@
   border-radius: 0.2rem;
 }
 
-.child-input-container {
+.child_input_container {
   width: 100%;
   /* background-color: aqua; */
   display: flex;
   justify-content: space-around;
 }
 
-.child-input-container input:nth-child(1) {
+.child_input_container input:nth-child(1) {
   margin-right: 0.3rem;
 }
 
-.add-button-container {
+.add_button_container {
   display: flex;
   flex-direction: column;
   margin-top: 0.5rem;
 }
 
-.add-button-container button {
+.add_button_container button {
   height: 2rem;
   border-radius: 0.2rem;
   border-style: none;
@@ -109,33 +111,17 @@
   font-size: 1.2rem;
 }
 
-.add-button-container button:nth-child(1) {
+.add_button_container button:nth-child(1) {
   margin-bottom: 0.5rem;
   background-color: var(--green);
 }
 
-.add-button-container button:nth-child(2) {
+.add_button_container button:nth-child(2) {
   background-color: var(--red);
 }
 
-.products-list{
-  list-style: none;
-}
 
-.products-list li{
-  margin: 0.5rem 0;
-  border-bottom: dashed white 2px;
-}
-
-.product-list{
-  list-style: none;
-}
-
-.product-list li{
-  margin: 0.5rem 0;
-}
-
-.add-product-btn{
+.add_product_btn{
   /* background-color: blue; */
   display: flex;
   justify-content: center;
@@ -144,18 +130,18 @@
 
 }
 
-.add-product-btn svg{
+.add_product_btn svg{
   font-size: 2rem;
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
 
-.add-product-btn svg:hover{
+.add_product_btn svg:hover{
   color: var(--green);
 }
 
 
-.suggest-list {
+.suggest_list {
   background-color: var(--light-black);
   position: absolute;
   z-index: 20;
@@ -165,17 +151,17 @@
   -moz-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
 }
 
-.suggest-list ul {
+.suggest_list ul {
   list-style: none;
   padding: 0.5rem 1rem;
 }
 
-.suggest-list li {
+.suggest_list li {
   margin: 0.3rem 0;
   cursor: pointer;
   font-size: 0.8rem;
 }
 
-.suggest-list li:hover{
+.suggest_list li:hover{
 	color: var(--purple);
 }

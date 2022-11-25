@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import addProductStyles from './AddProduct.module.css'
 import moment from 'moment';
 
 const AddProduct = () => {
@@ -34,7 +35,7 @@ const AddProduct = () => {
         onChange={onProductChange}
       />
       <div></div>
-      <div className="child-input-container">
+      <div className={addProductStyles.child_input_container}>
         <input
           type="number"
           placeholder="Quantity"
@@ -55,6 +56,7 @@ const AddProduct = () => {
         value={productValues.category}
         name="category"
         onChange={onProductChange}
+        className={addProductStyles.select}
       >
         <option value="food">Food</option>
         <option value="drink">Drink</option>
@@ -67,7 +69,7 @@ const AddProduct = () => {
         name="date"
         onChange={onProductChange}
       />
-      <div className="add-button-container">
+      <div className={addProductStyles.add_button_container}>
         <button type="submit">Add Product</button>
         <button>Cancel</button>
       </div>

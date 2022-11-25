@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import addCustomerStyles from './AddCustomer.module.css'
 import moment from 'moment';
 
 const AddCustomer = () => {
@@ -61,6 +62,7 @@ const AddCustomer = () => {
         name="category"
         value={customerValues.category}
         onChange={onCustomerChange}
+        className={addCustomerStyles.select}
       >
         <option value="standard">Standard</option>
         <option value="premium">Premium</option>
@@ -73,7 +75,7 @@ const AddCustomer = () => {
         name="date"
         onChange={onCustomerChange}
       />
-      <div className="add-button-container">
+      <div className={addCustomerStyles.add_button_container}>
         <button type="submit">Add Customer</button>
         <button>Cancel</button>
       </div>

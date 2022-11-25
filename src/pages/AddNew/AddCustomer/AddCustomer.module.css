@@ -1,0 +1,38 @@
+select{
+	text-align: start;
+	background-color: #fff;
+	color: rgb(62, 61, 61);
+}
+
+.select:hover{
+	background-color: #fff!important;
+}
+
+.add_button_container{
+	width: 100%;
+}
+
+.add_button_container button:nth-child(1){
+	background-color: var(--green);
+	height: 2rem;
+	width: 100%;
+	border: none;
+	color: #fff;
+	border-radius: 0.3rem;
+	font-size: 1.3rem;
+	font-weight: 600;
+	cursor: pointer;
+	margin: 1rem 0 0.5rem 0;
+}
+
+.add_button_container button:nth-child(2){
+	background-color: var(--red);
+	height: 2rem;
+	width: 100%;
+	border: none;
+	color: #fff;
+	border-radius: 0.3rem;
+	font-size: 1.3rem;
+	font-weight: 600;
+	cursor: pointer;
+}

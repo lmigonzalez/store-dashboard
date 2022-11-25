@@ -1,4 +1,4 @@
-import './Products.css';
+import ordersStyles from './Products.module.css';
 import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -47,10 +47,28 @@ const Products = () => {
   };
 
   return (
-    <section className="products-container">
-      <div className="products-header"></div>
-      <div className="search-container">
-        <div className="search-bar">
+    <section className={ordersStyles.products_container}>
+      <div className={ordersStyles.products_header}>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Products</th>
+              <th>Stock</th>
+              <th>Categories</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{780}</td>
+              <td>{7850}</td>
+              <td>{24}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className={ordersStyles.search_container}>
+        <div className={ordersStyles.search_bar}>
           <select name="search" onChange={onSelectCategory}>
             <option value="name">name</option>
             <option value="quantity">quantity</option>
@@ -66,8 +84,8 @@ const Products = () => {
           />
         </div>
       </div>
-      <div className="products-body">
-        <div className="products-table">
+      <div className={ordersStyles.products_body}>
+        <div className={ordersStyles.products_table}>
           <Table data={tableData} searching={searching} component={'products'}/>
         </div>
       </div>

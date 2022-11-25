@@ -1,4 +1,4 @@
-.sidebar-container{
+.sidebar_container{
   position: fixed;
   z-index: 100;
   top: 0;
@@ -15,13 +15,15 @@
 .sidebar a {
   font-weight: 500;
   margin: 0.5rem 0;
+  font-size: 1.3rem;
 }
 
 .sidebar svg {
   margin-right: 0.5rem;
+  font-size: 1.3rem;
 }
 
-.sidebar-title {
+.sidebar_title {
   height: 6.25rem;
   border-bottom: 3px solid var(--light-black);
   display: flex;
@@ -51,7 +53,7 @@
 .links .active svg {
   color: var(--purple);
 }
-.settings-container {
+.settings_container {
   border-top: 3px solid var(--light-black);
   padding: 1rem;
   position: absolute;

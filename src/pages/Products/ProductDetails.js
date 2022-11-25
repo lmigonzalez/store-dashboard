@@ -1,17 +1,17 @@
-import './ProductDetails.css'
-import React, { useState } from 'react';
+import productDetailsStyles from './ProductDetails.module.css';
+import React, { useState, useEffect } from 'react';
 import LineChard from '../../components/Chard/Chard';
 
-import { AiOutlineDelete, AiOutlineForm} from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineForm } from 'react-icons/ai';
 
 import Edit from '../../components/Edit/Edit';
 import Delete from '../../components/Delete/Delete';
-
+import BackBtn from '../../components/BackBtn/BackBtn';
 
 const ProductDetails = () => {
   const [tab, setTab] = useState(1);
-  const [deleteProduct, setDeleteProduct] = useState(false)
-  const [editProduct, setEditProduct] = useState(false)
+  const [deleteProduct, setDeleteProduct] = useState(false);
+  const [editProduct, setEditProduct] = useState(false);
   const data = [
     {
       id: 1,
@@ -57,38 +57,50 @@ const ProductDetails = () => {
     ],
   });
 
+  const [productName, setProductName] = useState('');
+
+  useEffect(() => {
+    setProductName(localStorage.getItem('subjectName'));
+  }, []);
+
   const switchTab = (tabName) => {
     setTab(tabName);
   };
 
-  const onDelete = () =>{
-    setDeleteProduct(!deleteProduct)
-    setEditProduct(false)
-  }
-  
-  const onEdit = () =>{
-    setEditProduct(!editProduct)
-    setDeleteProduct(false)
-  }
-  
-  const onCancel = () =>{
-    setDeleteProduct(false)
-    setEditProduct(false)
-    
-  }
+  const onDelete = () => {
+    setDeleteProduct(!deleteProduct);
+    setEditProduct(false);
+  };
+
+  const onEdit = () => {
+    setEditProduct(!editProduct);
+    setDeleteProduct(false);
+  };
+
+  const onCancel = () => {
+    setDeleteProduct(false);
+    setEditProduct(false);
+  };
 
   return (
-    <section className="graph-container">
-      {editProduct && <Edit onCancel = {onCancel} component={'product'}/>}
-      
-      {deleteProduct && <Delete category = {'product'} item={'lenovo legion i7'} onCancel = {onCancel}/>}
-      
-      <div className="graph-header">
-        <h1>graph</h1>
+    <section className={productDetailsStyles.graph_container}>
+      {editProduct && <Edit onCancel={onCancel} component={'product'} />}
+
+      {deleteProduct && (
+        <Delete
+          category={'product'}
+          item={'lenovo legion i7'}
+          onCancel={onCancel}
+        />
+      )}
+
+      <div className={productDetailsStyles.graph_header}>
+        <BackBtn />
+        <h2>Product Name: {productName}</h2>
       </div>
-      <div className="graph-body">
-        <div className="search-container">
-          <div className="products-options">
+      <div className={productDetailsStyles.graph_body}>
+        <div className={productDetailsStyles.search_container}>
+          <div className={productDetailsStyles.products_options}>
             <select>
               <option value="Last 7 days">Last 7 days</option>
               <option value="Last 28 days">Last 28 days</option>
@@ -97,16 +109,16 @@ const ProductDetails = () => {
               <option value="From the beginning">From the beginning</option>
             </select>
             <div>
-              <AiOutlineForm onClick={onEdit}/>
-              <AiOutlineDelete onClick={onDelete}/>
+              <AiOutlineForm onClick={onEdit} />
+              <AiOutlineDelete onClick={onDelete} />
             </div>
           </div>
         </div>
 
-        <div className="body-header">
+        <div className={productDetailsStyles.body_header}>
           <div
             className={
-              tab === 1 ? 'header-information selected' : 'header-information'
+              tab === 1 ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}` : productDetailsStyles.header_information
             }
             onClick={() => switchTab(1)}
           >
@@ -120,7 +132,7 @@ const ProductDetails = () => {
 
           <div
             className={
-              tab === 2 ? 'header-information selected' : 'header-information'
+              tab === 2 ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}` : productDetailsStyles.header_information
             }
             onClick={() => switchTab(2)}
           >
@@ -132,7 +144,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="header-information">
+          <div className={productDetailsStyles.header_information}>
             <p>Units Available</p>
             <h2>1,200</h2>
             <div>
@@ -142,7 +154,7 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        <div className="body-content">
+        <div className={productDetailsStyles.body_content}>
           {tab === 1 && <LineChard className="chard" chartData={sales} />}
           {tab === 2 && <LineChard className="chard" chartData={sales} />}
           {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import customerDetailsStyles from './CustomerDetails.module.css'
 import LineChard from '../../components/Chard/Chard';
 
 import { AiOutlineDelete, AiOutlineForm } from 'react-icons/ai';
 
 import Edit from '../../components/Edit/Edit';
 import Delete from '../../components/Delete/Delete';
+import BackBtn from '../../components/BackBtn/BackBtn';
 
 function CustomerDetails() {
   const [tab, setTab] = useState(1);
@@ -56,6 +57,13 @@ function CustomerDetails() {
     ],
   });
 
+
+  const [productName, setProductName] = useState('');
+
+  useEffect(() => {
+    setProductName(localStorage.getItem('subjectName'));
+  }, []);
+
   const switchTab = (tabName) => {
     setTab(tabName);
   };
@@ -76,7 +84,7 @@ function CustomerDetails() {
   };
 
   return (
-    <section className="graph-container">
+    <section className={customerDetailsStyles.graph_container}>
       {editCustomer && <Edit onCancel={onCancel} component={'customer'}/>}
 
       {deleteCustomer && (
@@ -87,12 +95,13 @@ function CustomerDetails() {
         />
       )}
 
-      <div className="graph-header">
-        <h1>graph</h1>
+      <div className={customerDetailsStyles.graph_header}>
+        <BackBtn />
+        <h2>Customer Name: {productName}</h2>
       </div>
-      <div className="graph-body">
-        <div className="search-container">
-          <div className="products-options">
+      <div className={customerDetailsStyles.graph_body}>
+        <div className={customerDetailsStyles.search_container}>
+          <div className={customerDetailsStyles.customers_options}>
             <select>
               <option value="Last 7 days">Last 7 days</option>
               <option value="Last 28 days">Last 28 days</option>
@@ -107,10 +116,10 @@ function CustomerDetails() {
           </div>
         </div>
 
-        <div className="body-header">
+        <div className={customerDetailsStyles.body_header}>
           <div
             className={
-              tab === 1 ? 'header-information selected' : 'header-information'
+              tab === 1 ? `${customerDetailsStyles.header_information} ${customerDetailsStyles.selected}` : customerDetailsStyles.header_information
             }
             onClick={() => switchTab(1)}
           >
@@ -124,7 +133,7 @@ function CustomerDetails() {
 
           <div
             className={
-              tab === 2 ? 'header-information selected' : 'header-information'
+              tab === 2 ? `${customerDetailsStyles.header_information} ${customerDetailsStyles.selected}` : customerDetailsStyles.header_information
             }
             onClick={() => switchTab(2)}
           >
@@ -136,7 +145,7 @@ function CustomerDetails() {
             </div>
           </div>
 
-          <div className="header-information">
+          <div className={customerDetailsStyles.header_information}>
             <p>Customer Since</p>
             <h2>Jul, 25 2020</h2>
             <div>
@@ -145,7 +154,7 @@ function CustomerDetails() {
           </div>
         </div>
 
-        <div className="body-content">
+        <div className={customerDetailsStyles.body_content}>
           {tab === 1 && <LineChard className="chard" chartData={sales} />}
           {tab === 2 && <LineChard className="chard" chartData={sales} />}
           {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}

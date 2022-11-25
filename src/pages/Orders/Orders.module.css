@@ -1,0 +1,167 @@
+.orders_container{
+	margin: 0 2rem;
+	/* height: 100vh; */
+	display: flex;
+	flex-direction: column;
+}
+.orders_header{
+	min-height: 6.25rem;
+	display: flex;
+	justify-content:space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.orders_header table{
+	width: 100%;
+	border: none;
+	font-size: 1.3rem;
+}
+
+.orders_header td{
+	cursor: auto;
+	width: 33%;
+}
+
+.orders_header th{
+	border: none;
+	padding: 0;
+}
+
+.orders_header tbody tr:last-child td{
+	border: none;
+}
+
+.search_container{
+	/* background-color: blue; */
+	margin-bottom: 1rem;
+
+}
+
+.search_bar{
+	display: flex;
+	align-items: center;
+}
+
+
+.search_bar select{
+	height: 2.5rem;
+	border: 1px solid white;
+	background-color: transparent;
+	color: white;
+	outline: none;
+	margin-right: 0.3rem;
+	padding: 0 0.3rem;
+	font-size: 1rem;
+	text-align: center;
+}
+
+.search_bar input{
+	height: 2.5rem;
+	color: white;
+	border: 1px solid white;
+	background-color: transparent;
+	outline: none;
+	padding: 0 0.3rem;
+	font-size: 1rem;
+}
+
+
+
+.customers_body{
+	/* background-color: blue; */
+	width: 100%;
+	height: auto;
+	/* max-height: 100%; */
+	display: flex;
+	flex-direction: column;
+	background-color: var(--light-black);
+	padding: 0 1rem;
+	border-radius: 0.5rem;
+	/* overflow-y: scroll; */
+}
+
+
+
+.orders_table{
+	position: relative;
+
+}
+
+.order_table{
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: separate;
+	background-color: var(--light-black);
+	table-layout: fixed;
+}
+
+.row_selected{
+	background-color: var(--red);
+	position: relative;
+}
+
+.order_table th {
+	border-bottom: 0.1rem solid var(--dark-black);
+	padding: 0.6rem;
+	text-align: center;
+}
+
+/* .order_table tbody tr{
+	position: relative;
+} */
+
+.order_table tbody tr:last-child th {
+	border-bottom: 0.2rem solid var(--dark-black);
+}
+
+.order_table tbody th {
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.order_table tbody tr:hover{
+	background-color: var(--dark-black);
+}
+
+.table_pagination{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.paginationBttns {
+	width: auto;
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+  }
+  
+  .paginationBttns a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	padding: 0.5rem;
+	margin: 0.5rem;
+	border-radius: 0.3rem;
+	color: var(--dark-black);
+	background-color: white;
+	cursor: pointer;
+	text-align: center;
+
+  }
+  
+  .paginationBttns a:hover {
+	color: white;
+	background-color: var(--red);
+  }
+  
+  .paginationActive a {
+	color: white;
+	background-color: var(--red);
+  }

@@ -1,0 +1,104 @@
+
+.products_list{
+	list-style: none;
+  }
+  
+  .products_list li{
+	margin: 0.5rem 0;
+	border-bottom: dashed white 2px;
+  }
+  
+  .product_list{
+	list-style: none;
+  }
+  
+  .product_list li{
+	margin: 0.5rem 0;
+  }
+
+.add_button_container{
+	width: 100%;
+}
+
+.add_order_container li{
+	list-style: none;
+}
+
+.add_product_btn{
+	margin: 1rem auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	cursor: pointer;
+}
+
+.add_button_container button:nth-child(1){
+	background-color: var(--green);
+	height: 2rem;
+	width: 100%;
+	border: none;
+	color: #fff;
+	border-radius: 0.3rem;
+	font-size: 1.3rem;
+	font-weight: 600;
+	cursor: pointer;
+	margin: 0 0 0.5rem 0;
+}
+
+.add_button_container button:nth-child(2){
+	background-color: var(--red);
+	height: 2rem;
+	width: 100%;
+	border: none;
+	color: #fff;
+	border-radius: 0.3rem;
+	font-size: 1.3rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+
+.child_input_container{
+	display: flex;
+}
+
+.child_input_container input:nth-child(1){
+	margin-right: 0.5rem;
+}
+
+.receipt{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 5rem;
+}
+
+.download-pdf{
+	/* background-color: blue; */
+	display:  flex;
+	justify-content: end;
+	align-items: center;
+}
+
+.download-pdf button{
+	height: 2rem;
+	padding: 0.3rem;
+	background-color: var(--green);
+	border: none;
+	color: #000;
+	font-size: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.download-pdf button:hover{
+	background-color: var(--green-hover);
+}
+
+.download-pdf button svg{
+	margin-right: 0.5rem;
+}
