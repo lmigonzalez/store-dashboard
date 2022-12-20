@@ -1,5 +1,6 @@
 .customers_container{
 	margin: 0 2rem;
+	padding-bottom: 5rem;
 	/* height: 100vh; */
 	display: flex;
 	flex-direction: column;
@@ -10,7 +11,7 @@
 	display: flex;
 	justify-content:space-between;
 	align-items: center;
-	margin-bottom: 0.5rem;
+	margin-bottom: 1rem;
 	/* background-color: blue; */
 }
 
@@ -22,11 +23,13 @@
 
 .customers_header td{
 	cursor: auto;
+	
 }
 
 .customers_header th{
 	border: none;
 	padding: 0;
+
 }
 
 .customers_header tbody tr:last-child td{

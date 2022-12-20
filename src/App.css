@@ -1,39 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
-:root{
+:root {
   --dark-black: #222831;
   --light-black: #393e46;
-  --purple: #7858A6;
-  --green: #4ECCA3;
-  --red: #B04A4A;
-  --purple-hover: #B1AFFF;
+  --purple: #7858a6;
+  --green: #4ecca3;
+  --red: #b04a4a;
+  --purple-hover: #b1afff;
   --dark-hover: #5c616a;
   --green-hover: #2f886a;
-  --red-hover: #E26868;
+  --red-hover: #e26868;
 }
 
-
-body{
+body {
   background-color: var(--dark-black);
   color: #fff;
   width: 100%;
 }
 
-main{
+main {
   width: 100%;
   max-height: 100vh;
   display: flex;
   justify-content: center;
   padding-left: 15rem;
+  /* background-color: #2f886a; */
   /* align-items: center; */
 }
 
+.no-sidebar{
+  padding-left: 0;
+  
+}
 
 a {
   text-decoration: none;
@@ -42,21 +46,19 @@ a {
   font-size: 1.3rem;
 }
 
-.content-section{
+.content-section {
   width: 100%;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
- flex-direction: column;
- justify-content: space-between;
-
+  flex-direction: column;
+  justify-content: space-between;
   /* position: relative; */
-  /* padding-bottom: 1rem; */
 }
 
-select{
+select {
   appearance: none;
-  -moz-appearance:none;
-  -webkit-appearance:none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
   text-align: center;
   cursor: pointer;
   transition: 0.1s ease-in-out;
@@ -70,8 +72,6 @@ select{
   /* background-color: #7858A6!important; */
 }
 
-
-select:hover{
-  background-color: var(--light-black)!important;
- 
+select:hover {
+  background-color: var(--light-black) !important;
 }

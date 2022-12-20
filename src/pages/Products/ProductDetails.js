@@ -1,5 +1,12 @@
 import productDetailsStyles from './ProductDetails.module.css';
 import React, { useState, useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import {getProductsStatus} from '../../features/products/productsSlice'
+
+
+import moment from 'moment';
 import LineChard from '../../components/Chard/Chard';
 
 import { AiOutlineDelete, AiOutlineForm } from 'react-icons/ai';
@@ -8,7 +15,13 @@ import Edit from '../../components/Edit/Edit';
 import Delete from '../../components/Delete/Delete';
 import BackBtn from '../../components/BackBtn/BackBtn';
 
+import { getStartDate } from '../../utils/getStartDate';
+
 const ProductDetails = () => {
+
+  const dispatch = useDispatch()
+  const productsStatus = useSelector(getProductsStatus);
+
   const [tab, setTab] = useState(1);
   const [deleteProduct, setDeleteProduct] = useState(false);
   const [editProduct, setEditProduct] = useState(false);
@@ -57,11 +70,18 @@ const ProductDetails = () => {
     ],
   });
 
-  const [productName, setProductName] = useState('');
+  const [product, setProduct] = useState({});
+
+  const [startDate, setStartDate] = useState('');
 
   useEffect(() => {
-    setProductName(localStorage.getItem('subjectName'));
+    setStartDate(getStartDate(7));
   }, []);
+
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem('subjectName'));
+    setProduct(data);
+  }, [productsStatus, dispatch]);
 
   const switchTab = (tabName) => {
     setTab(tabName);
@@ -82,6 +102,11 @@ const ProductDetails = () => {
     setEditProduct(false);
   };
 
+  const getSelectedDate = (e) => {
+    let date = parseInt(e.target.value);
+    setStartDate(getStartDate(date));
+  };
+
   return (
     <section className={productDetailsStyles.graph_container}>
       {editProduct && <Edit onCancel={onCancel} component={'product'} />}
@@ -89,24 +114,30 @@ const ProductDetails = () => {
       {deleteProduct && (
         <Delete
           category={'product'}
-          item={'lenovo legion i7'}
+          item={product.name}
+          id={product._id}
           onCancel={onCancel}
         />
       )}
 
       <div className={productDetailsStyles.graph_header}>
         <BackBtn />
-        <h2>Product Name: {productName}</h2>
+        <div className={productDetailsStyles.graph_header_inf}>
+          <h2>{product.name}</h2>
+          <div>
+            {`FROM: ${startDate} - TO: ${moment().format('MMM DD YYYY')}`}
+          </div>
+        </div>
       </div>
       <div className={productDetailsStyles.graph_body}>
         <div className={productDetailsStyles.search_container}>
           <div className={productDetailsStyles.products_options}>
-            <select>
-              <option value="Last 7 days">Last 7 days</option>
-              <option value="Last 28 days">Last 28 days</option>
-              <option value="Last 90 days">Last 90 days</option>
-              <option value="Last 365 days">Last 365 days</option>
-              <option value="From the beginning">From the beginning</option>
+            <select onChange={getSelectedDate}>
+              <option value={7}>Last 7 days</option>
+              <option value={28}>Last 28 days</option>
+              <option value={90}>Last 90 days</option>
+              <option value={365}>Last 365 days</option>
+              <option value="*">From the beginning</option>
             </select>
             <div>
               <AiOutlineForm onClick={onEdit} />
@@ -118,7 +149,9 @@ const ProductDetails = () => {
         <div className={productDetailsStyles.body_header}>
           <div
             className={
-              tab === 1 ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}` : productDetailsStyles.header_information
+              tab === 1
+                ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}`
+                : productDetailsStyles.header_information
             }
             onClick={() => switchTab(1)}
           >
@@ -132,7 +165,9 @@ const ProductDetails = () => {
 
           <div
             className={
-              tab === 2 ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}` : productDetailsStyles.header_information
+              tab === 2
+                ? `${productDetailsStyles.header_information} ${productDetailsStyles.selected}`
+                : productDetailsStyles.header_information
             }
             onClick={() => switchTab(2)}
           >
@@ -146,7 +181,7 @@ const ProductDetails = () => {
 
           <div className={productDetailsStyles.header_information}>
             <p>Units Available</p>
-            <h2>1,200</h2>
+            <h2>{product.quantity}</h2>
             <div>
               <p>+15.2%</p>
               <p>+825 this year</p>

@@ -13,7 +13,7 @@ const Receipt = ({ receipt }) => {
   };
 
   const tax = () => {
-    return (subTotal() / 7).toFixed(2);
+    return ((subTotal() * 7) / 100).toFixed(2);
   };
 
   const total = () => {
@@ -57,7 +57,7 @@ const Receipt = ({ receipt }) => {
             {receipt.orders.map((product, index) => {
               return (
                 <tr key={index}>
-                  <th>{product.productName}</th>
+                  <th>{product.name}</th>
                   <th>{product.amount}</th>
                   <th>${product.price}</th>
                   <th>${(parseFloat(product.amount) * parseFloat(product.price)).toFixed(2)}</th>

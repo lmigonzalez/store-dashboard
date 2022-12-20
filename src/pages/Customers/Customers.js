@@ -1,8 +1,15 @@
-import React, {useState, useEffect} from 'react'
-import customersStyles from './Customers.module.css'
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import customersStyles from './Customers.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectAllCustomers,
+  getCustomersStatus,
+  getCustomersError,
+  fetchCustomers,
+} from '../../features/customers/customersSlice';
 
 import { findByName } from '../../utils/productsUtils';
+
 import Table from '../../components/Table/Table';
 
 const Customers = () => {
@@ -12,7 +19,11 @@ const Customers = () => {
 
   const [searching, setSearching] = useState(false);
 
-  const customersData = useSelector((state) => state.customers);
+  // const customersData = useSelector((state) => state.customers);
+  const dispatch = useDispatch();
+  const customersData = useSelector(selectAllCustomers);
+  const customersStatus = useSelector(getCustomersStatus);
+  const error = useSelector(getCustomersError);
 
   const tableData = {
     header: ['Name', 'Email', 'Phone', 'Address', 'Plan'],
@@ -26,6 +37,13 @@ const Customers = () => {
     // findByName(productsData, keyword, selectedCategory);
     checkIfSearching();
   }, [keyword]);
+
+  useEffect(() => {
+    if (customersStatus === 'idle' || customersStatus === 'loading') {
+      dispatch(fetchCustomers(fetchCustomers()));
+    }
+    productTest()
+  }, [customersStatus, dispatch]);
 
   const onSelectCategory = (e) => {
     setSelectedCategory(e.target.value);
@@ -41,14 +59,21 @@ const Customers = () => {
     } else {
       setSearching(false);
     }
-
   };
-
+  const productTest = () => {
+    let arr = []
+    tableData.data.map(name=>{
+      let newArr = {}
+      newArr.name = name.name
+      newArr.id = name._id
+      arr.push(newArr)
+    })
+  }
 
   return (
     <section className={customersStyles.customers_container}>
       <div className={customersStyles.customers_header}>
-        <h2>Customers: {560}</h2>
+        <h2>Customers: {customersData.length}</h2>
       </div>
       <div className={customersStyles.search_container}>
         <div className={customersStyles.search_bar}>
@@ -70,11 +95,17 @@ const Customers = () => {
       </div>
       <div className={customersStyles.customers_body}>
         <div className={customersStyles.customers_table}>
-          <Table data={tableData} searching={searching} component={'customers'}/>
+          {tableData.data.length && (
+            <Table
+              data={tableData}
+              searching={searching}
+              component={'customers'}
+            />
+          )}
         </div>
       </div>
     </section>
   );
-}
+};
 
-export default Customers
+export default Customers;

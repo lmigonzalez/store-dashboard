@@ -1,193 +1,108 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-const initialState = [
-  {
-    id: 1,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 2,
-    name: 'Pedro',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 3,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 4,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 5,
-    name: 'Jose',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 6,
-    name: 'Jose',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 7,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 8,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 9,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 10,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 11,
-    name: 'Fernando',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 12,
-    name: 'Fernando',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 13,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 14,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 15,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 16,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 17,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 18,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 19,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 20,
-    name: 'Luis Gonzalez',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-  {
-    id: 21,
-    name: 'Julian',
-    email: 'luis@gmail.com',
-    phone: 7868794441,
-    address: '5659 sw 122th place 33183',
-    plan: 'Premium',
-  },
-];
+const URL = 'http://localhost:3032/api/';
+
+const initialState = {
+  customers: [],
+  status: 'idle',
+  error: null,
+};
+
+export const fetchCustomers = createAsyncThunk('customers/getAll', async () => {
+  const response = await axios.get(`${URL}customers`);
+  return response.data;
+});
+
+export const addNewCustomer = createAsyncThunk(
+  'customers/addNew',
+  async (newCustomer) => {
+    const response = await axios.post(`${URL}new-customer`, newCustomer);
+    return response.data;
+  }
+);
+
+export const deleteCustomer = createAsyncThunk(
+  'customers/delete',
+  async (id) => {
+    const response = await axios.delete(`${URL}delete-customer`, {
+      data: { id },
+    });
+    return response.data;
+  }
+);
+
+export const editCustomer = createAsyncThunk(
+  'customer/edit',
+  async (dataToEdit, state) => {
+    const { _id } = dataToEdit;
+    const response = await axios.patch(`${URL}edit-customer`, dataToEdit);
+    return response.data;
+  }
+);
 
 export const customersSlice = createSlice({
-  name: 'counter',
+  name: 'customers',
   initialState,
-  reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchCustomers.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchCustomers.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const loadedCustomers = action.payload;
+        state.customers = loadedCustomers;
+      })
+      .addCase(fetchCustomers.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(addNewCustomer.fulfilled, (state, action) => {
+        state.customers.unshift(action.payload);
+      })
+      .addCase(deleteCustomer.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteCustomer.fulfilled, (state, action) => {
+        state.customers.splice(
+          state.customers.findIndex(
+            (customer) => customer._id === action.payload
+          ),
+          1
+        );
+      })
+      .addCase(editCustomer.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(editCustomer.fulfilled, (state, action) => {
+        // const { id } = action.payload;
+        const updatedCustomer = action.payload.result;
+        state.status = 'succeeded';
+
+        const index = state.customers.findIndex(
+          (element) => element._id === updatedCustomer._id
+        );
+        state.customers[index] = updatedCustomer;
+
+        // let data = [];
+        // state.customers.map((element) => {
+        //   if (element._id === updatedCustomer._id) {
+        //     data.push(updatedCustomer);
+        //   } else {
+        //     data.push(element);
+        //   }
+        // });
+        // state.customers = data;
+      });
   },
 });
 
-export const { increment, decrement, incrementByAmount } =
-  customersSlice.actions;
+export const selectAllCustomers = (state) => state.customers.customers;
+export const getCustomersStatus = (state) => state.customers.status;
+export const getCustomersError = (state) => state.customers.error;
+
+// export const { increment, decrement, incrementByAmount } =
+//   customersSlice.actions;
 
 export default customersSlice.reducer;

@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  padding-bottom: 5rem;
 }
 .graph_header {
   min-height: 6.25rem;
@@ -81,21 +82,31 @@
 
 .body_content {
   background-color: var(--light-black);
-  height: auto;
+  width: 100%;
+	height: 100%;
+	max-height: 30rem;
   border-radius: 0.5rem;
   padding: 1rem;
 }
 
 .graph_header {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+}
+
+.graph_header_inf{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
 }
 
 .products_options {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
 }
 
 .products_options select {
@@ -106,6 +117,7 @@
   font-size: 1rem;
   margin-right: 0.3rem;
   padding: 0 0.3rem;
+  text-align: center;
 }
 
 .products_options svg {

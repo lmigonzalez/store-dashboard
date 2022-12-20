@@ -1,17 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllProducts } from '../../../features/products/productsSlice';
+import { selectAllCustomers } from '../../../features/customers/customersSlice';
+import { addNewOrder } from '../../../features/orders/ordersSlice';
 import addOrderStyles from './AddOrder.module.css';
 import axios from 'axios';
-import {saveAs} from 'file-saver'
+import { saveAs } from 'file-saver';
 import moment from 'moment';
-import { AiOutlineDownload } from "react-icons/ai";
+import { AiOutlineDownload } from 'react-icons/ai';
 import { orderProductNameSuggestion } from '../../../utils/searchSuggestions';
 import { orderClientNameSuggestion } from '../../../utils/searchSuggestions';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 import Receipt from '../Receipt/Receipt';
 
-
 const AddOrder = () => {
+  const dispatch = useDispatch();
   const ref = useRef();
   const [width, setWidth] = useState(850);
   const [height, setHeight] = useState(1100);
@@ -34,45 +38,42 @@ const AddOrder = () => {
       setWidth(ref.current.offsetWidth);
       setHeight(width * 1.3);
     }
-
   }, [width]);
 
   const orderInitialValues = {
     clientName: '',
-    // orders: numberOfOrders(),
+    clientId: '',
     date: moment().format('YYYY-MM-DD'),
   };
 
-  const productNameSuggestionsValues = [
-    'Pizza',
-    'Coca Cola',
-    'Tacos',
-    'Chicken',
-    'Sandwich',
-  ];
-
-  const clientNameSuggestionsValues = [
-    'Juan',
-    'Eduardo',
-    'Luis Miguel',
-    'Ricardo',
-    'Joaquin',
-  ];
+  const productNameSuggestionsValues = useSelector(selectAllProducts);
+  const clientNameSuggestionsValues = useSelector(selectAllCustomers);
 
   const ordersInitial = {
-    productName: '',
+    name: '',
+    quantity: '',
     amount: '',
     price: '',
+    id: '',
   };
 
   const [receipt, setReceipt] = useState(initialReceiptData);
-  const [showReceipt, setShowReceipt] = useState(false)
-  const [productForms, setProductForms] = useState(1);
+  const [showReceipt, setShowReceipt] = useState(false);
+  // const [productForms, setProductForms] = useState(1);
   const [orderValues, setOrderValues] = useState(orderInitialValues);
   const [orders, setOrders] = useState([ordersInitial]);
 
   const [productNameSuggestions, setProductNameSuggestions] = useState([]);
   const [clientNameSuggestions, setClientNameSuggestions] = useState([]);
+
+  const [selectedInput, setSelectedInput] = useState(-1);
+
+  useEffect(() => {
+    if (orderValues.orders) {
+      dispatch(addNewOrder(orderValues));
+      console.log(orderValues);
+    }
+  }, [onOrderSubmit]);
 
   const onOrderChange = (e) => {
     setOrderValues({
@@ -80,61 +81,36 @@ const AddOrder = () => {
       [e.target.name]: e.target.value,
     });
 
-    if (e.target.name === 'productName') {
-      setProductNameSuggestions(() =>
-        orderProductNameSuggestion(e.target.value, productNameSuggestionsValues)
-      );
-    }
-
-    if (e.target.name === 'clientName') {
-      setClientNameSuggestions(() =>
-        orderClientNameSuggestion(e.target.value, clientNameSuggestionsValues)
-      );
-    }
-  };
-
-  const onOrderProductChange = (i) => (e) => {
-    let list = [...orders];
-
-    list[i][e.target.name] = e.target.value;
-    setOrders(list);
-
+    setClientNameSuggestions(() =>
+      orderClientNameSuggestion(e.target.value, clientNameSuggestionsValues)
+    );
   };
 
   const addProduct = () => {
     setOrders((orders) => [
       ...orders,
-      { productName: '', amount: '', price: '' },
+      { name: '', quantity: '', price: '', id: '', amount: '' },
     ]);
   };
 
-  function createPDF(){
-    axios.post('http://localhost:3032/pdf', orderValues)
-    .then(res=>{
-      console.log(res)
-    }).catch(err=>{
-      console.log(err)
-    })
-  }
+  const onOrderProductChange = (i) => (e) => {
+    let list = JSON.parse(JSON.stringify([...orders]));
+    list[i][e.target.name] = e.target.value;
 
- const printTickets = async() => {
-    const { data } = await getTicketsPdf()
-    console.log(data)
-    const blob = new Blob([data], { type: 'application/pdf' })
-    saveAs(blob, "tickets.pdf")
-  }
+    setOrders(list);
 
- const getTicketsPdf = async() => {
-    return axios.get('http://localhost:3032/getPdf', {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      responseType: 'arraybuffer'
-    })
-  }
+    if (e.target.name === 'name') {
+      setProductNameSuggestions(() =>
+        orderProductNameSuggestion(e.target.value, productNameSuggestionsValues)
+      );
+    }
 
-  const onOrderSubmit = async (e) => {
+    setSelectedInput(i);
+  };
+
+  function onOrderSubmit(e) {
     e.preventDefault();
+
     setOrderValues({
       ...orderValues,
       orders,
@@ -145,32 +121,61 @@ const AddOrder = () => {
       orders,
     });
 
-    setShowReceipt(!showReceipt)
-
-
-  };
-
-
-  const onOrderProductNameSuggestionSelected = (value) => {
-    setOrderValues({
-      ...orderValues,
-      productName: value,
-    });
-    setProductNameSuggestions([]);
-  };
+    setShowReceipt(!showReceipt);
+  }
 
   const onOrderClientNameSuggestionSelected = (value) => {
     setOrderValues({
       ...orderValues,
-      clientName: value,
+      clientName: value.name,
+      clientId: value._id,
     });
     setClientNameSuggestions([]);
   };
 
-  const downloadPDF = async() =>{
-    await createPDF()
-    printTickets()
+  const onOrderProductNameSuggestionSelected = (value, i) => {
+    let products = [...orders];
+    let product = { ...products[i] };
+    product = value;
+    products[i] = product;
+
+    setOrders(products);
+    setProductNameSuggestions([]);
+  };
+  // pdf
+
+  function createPDF() {
+    axios
+      .post('http://localhost:3032/pdf', orderValues)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  const printTickets = async () => {
+    const { data } = await getTicketsPdf();
+    console.log(data);
+    const blob = new Blob([data], { type: 'application/pdf' });
+    saveAs(blob, 'tickets.pdf');
+  };
+
+  const getTicketsPdf = async () => {
+    return axios.get('http://localhost:3032/getPdf', {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      responseType: 'arraybuffer',
+    });
+  };
+
+  const downloadPDF = async () => {
+    await createPDF();
+    printTickets();
+  };
+
   return (
     <div className={addOrderStyles.add_order_container}>
       <form onSubmit={onOrderSubmit}>
@@ -181,8 +186,9 @@ const AddOrder = () => {
             value={orderValues.clientName}
             name="clientName"
             onChange={onOrderChange}
+            autoComplete="off"
           />
-          <div className="suggest-list">
+          <div className={addOrderStyles.suggest_list}>
             {clientNameSuggestions.length > 0 && (
               <ul>
                 {clientNameSuggestions.map((value, i) => {
@@ -191,7 +197,7 @@ const AddOrder = () => {
                       onClick={() => onOrderClientNameSuggestionSelected(value)}
                       key={i}
                     >
-                      {value}
+                      {value.name}
                     </li>
                   );
                 })}
@@ -199,36 +205,48 @@ const AddOrder = () => {
             )}
           </div>
         </div>
-        <ul className= {orders.length > 1 ? addOrderStyles.products_list: addOrderStyles.product_list}>
-          {orders.map((prod, i) => {
+        <ul
+          className={
+            orders.length > 1
+              ? addOrderStyles.products_list
+              : addOrderStyles.product_list
+          }
+        >
+          {orders.map((prod, index) => {
             return (
-              <li key={i}>
+              <li key={index}>
                 <div>
                   <input
                     type="text"
                     placeholder="Product Name"
-                    value={prod.productName}
-                    name="productName"
-                    onChange={onOrderProductChange(i)}
+                    value={prod.name}
+                    name="name"
+                    onChange={onOrderProductChange(index)}
+                    autoComplete="off"
                   />
-                  <div className="suggest-list">
-                    {productNameSuggestions.length > 0 && (
-                      <ul>
-                        {productNameSuggestions.map((value, i) => {
-                          return (
-                            <li
-                              onClick={() =>
-                                onOrderProductNameSuggestionSelected(value)
-                              }
-                              key={i}
-                            >
-                              {value}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </div>
+                  {selectedInput === index && (
+                    <div className={addOrderStyles.suggest_list}>
+                      {productNameSuggestions.length > 0 && (
+                        <ul>
+                          {productNameSuggestions.map((value, i) => {
+                            return (
+                              <li
+                                onClick={() =>
+                                  onOrderProductNameSuggestionSelected(
+                                    value,
+                                    index
+                                  )
+                                }
+                                key={i}
+                              >
+                                {value.name}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className={addOrderStyles.child_input_container}>
                   <input
@@ -236,7 +254,7 @@ const AddOrder = () => {
                     placeholder="Amount"
                     value={prod.amount}
                     name="amount"
-                    onChange={onOrderProductChange(i)}
+                    onChange={onOrderProductChange(index)}
                     onWheel={() => document.activeElement.blur()}
                   />
                   <input
@@ -244,7 +262,7 @@ const AddOrder = () => {
                     placeholder="Price"
                     value={prod.price}
                     name="price"
-                    onChange={onOrderProductChange(i)}
+                    onChange={onOrderProductChange(index)}
                     onWheel={() => document.activeElement.blur()}
                   />
                 </div>
@@ -270,9 +288,9 @@ const AddOrder = () => {
       </form>
 
       {showReceipt && (
-        <div ref={ref} className="receipt">
+        <div ref={ref} className={addOrderStyles.receipt}>
           <div
-            className="receipt-paper"
+            className={addOrderStyles.receipt_paper}
             style={{
               width: width,
               height: height,
@@ -280,14 +298,16 @@ const AddOrder = () => {
               maxWidth: '850px',
             }}
           >
-            <div className='download-pdf'>
-              <button onClick={downloadPDF}> <AiOutlineDownload/> Download</button>
+            <div className={addOrderStyles.download_pdf}>
+              <button onClick={downloadPDF}>
+                {' '}
+                <AiOutlineDownload /> Download
+              </button>
             </div>
             <Receipt receipt={receipt} />
           </div>
         </div>
       )}
-      
     </div>
   );
 };

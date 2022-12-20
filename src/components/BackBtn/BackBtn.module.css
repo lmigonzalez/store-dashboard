@@ -1,24 +1,22 @@
-.button{
-	height: 2rem;
-	width: 2rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	outline: none;
-	border: none;
-	background-color: #fff;
-	cursor: pointer;
-	margin-right: 2rem;
-	transition: 0.3s ease-in-out;
+.button {
+  height: 2rem!important;
+  width: 2rem!important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+  margin-right: 2rem;
+  transition: 0.3s ease-in-out;
 }
 
-.button svg{
-	font-size: 1rem;
+.button svg {
+  font-size: 1rem;
 }
 
-.button button:hover{
-	border-radius: 2rem;
-	background-color: var(--light-black);
-	color: #fff;
-	border: 1px solid #fff;
-}
+/* .button:hover {
+  background-color: var(--light-black);
+  color: #fff;
+} */

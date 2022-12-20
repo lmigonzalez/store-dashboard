@@ -6,11 +6,10 @@ import ReactPaginate from 'react-paginate';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 
 const Table = ({ data, searching, component }) => {
+  
   const navigate = useNavigate();
 
   const tableData = data;
-
-  // const [tableData, setTableData] = useState(data)
 
   const [pageNumber, setPageNumber] = useState(0);
   let dataLength = tableData.data.length;
@@ -25,14 +24,14 @@ const Table = ({ data, searching, component }) => {
     ifSearching();
   }, [searching, dataLength]);
 
-  const componentUsingTable = (id, name) => {
-    localStorage.setItem('subjectName', name);
+  const componentUsingTable = (_id, tr) => {
+    localStorage.setItem('subjectName', JSON.stringify(tr));
     if (component === 'products') {
-      navigate(`/product/${id}`);
+      navigate(`/product/${_id}`);
     } else if (component === 'customers') {
-      navigate(`/customer/${id}`);
+      navigate(`/customer/${_id}`);
     } else if (component === 'orders') {
-      navigate(`/order/${id}`);
+      navigate(`/order/${_id}`);
     }
   };
 
@@ -66,12 +65,12 @@ const Table = ({ data, searching, component }) => {
             .map((tr) => {
               return (
                 <tr
-                  key={tr.id}
-                  onClick={() => componentUsingTable(tr.id, tr.name)}
+                  key={tr._id}
+                  onClick={() => componentUsingTable(tr._id, tr)}
                 >
                   {tableData.header.map((x, index) => {
                     if (tr.hasOwnProperty(x.toLowerCase())) {
-                      return <td key={index}>{tr[x.toLowerCase()]}</td>;
+                      return <td key={index}>{x === 'Price' && '$'}{tr[x.toLowerCase()]}</td>;
                     }
                   })}
                 </tr>

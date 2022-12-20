@@ -1,26 +1,28 @@
 .products_container{
 	margin: 0 2rem;
-	/* height: 100vh; */
 	display: flex;
 	flex-direction: column;
-	/* background-color: blue; */
+	padding-bottom: 5rem;
 }
+
 .products_header{
 	min-height: 6.25rem;
 	display: flex;
 	justify-content:space-between;
 	align-items: center;
-	margin-bottom: 0.5rem;
-	/* background-color: blue; */
+	margin-bottom: 1rem;
+	border-bottom: solid 3px var(--light-black);
 }
 
 .products_header table{
 	width: 100%;
 	border: none;
 	font-size: 1.3rem;
+	text-align: center;
 }
 
 .products_header td{
+	font-weight: 300;
 	cursor: auto;
 	width: 33%;
 }
@@ -30,14 +32,16 @@
 	padding: 0;
 }
 
+.products_header table tr:hover{
+	background-color: transparent;
+}
+
 .products_header tbody tr:last-child td{
 	border: none;
 }
 
 .search_container{
-	/* background-color: blue; */
 	margin-bottom: 1rem;
-
 }
 
 .search_bar{

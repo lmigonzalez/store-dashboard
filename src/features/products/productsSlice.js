@@ -1,176 +1,94 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialState = [
-	{
-	  id: 1,
-	  name: 'fume 1',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 2,
-	  name: 'product 2',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 3,
-	  name: 'product 3',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 4,
-	  name: 'product 4',
-	  quantity: 8,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 5,
-	  name: 'product 5',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 6,
-	  name: 'product 6',
-	  quantity: 10,
-	  price: 19.99,
-	  category: 'product category',
-	},
-	{
-	  id: 7,
-	  name: 'product 7',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 8,
-	  name: 'product 8',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 9,
-	  name: 'product 9',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 10,
-	  name: 'product 10',
-	  quantity: 100,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 11,
-	  name: 'product 11',
-	  quantity: 220,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 12,
-	  name: 'product 12',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 13,
-	  name: 'product 13',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 14,
-	  name: 'product 14',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 15,
-	  name: 'product 15',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 16,
-	  name: 'product 16',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 17,
-	  name: 'product 17',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 18,
-	  name: 'product 18',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 19,
-	  name: 'product 19',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
-	},
-	{
-	  id: 20,
-	  name: 'product 20',
-	  quantity: 10,
-	  price: 9.99,
-	  category: 'product category',
+import axios from 'axios';
+
+const URL = 'http://localhost:3032/api/';
+
+const initialState = {
+  products: [],
+  status: 'idle',
+  error: null,
+};
+
+export const fetchProducts = createAsyncThunk('products/getAll', async () => {
+  const response = await axios.get(`${URL}products`);
+  return response.data;
+});
+
+export const addNewProduct = createAsyncThunk(
+  'products/addNew',
+  async (newProduct) => {
+    console.log(newProduct);
+    const response = await axios.post(`${URL}new-product`, newProduct);
+    return response.data;
+  }
+);
+
+export const deleteProduct = createAsyncThunk('products/delete', async (id) => {
+  const response = await axios.delete(`${URL}delete-product`, {
+    data: { id },
+  });
+  return response.data;
+});
+
+export const editProduct = createAsyncThunk(
+	'customer/edit',
+	async (dataToEdit, state) => {
+	  const { _id } = dataToEdit;
+	  const response = await axios.patch(`${URL}edit-product`, dataToEdit);
+	  return response.data;
 	}
-	
-  ]
+  );
 
 export const productsSlice = createSlice({
-	name: 'products',
-	initialState,
-	reducers:{
-		increment: (state) =>{
-			state.value += 1
-		},
-		decrement: (state) =>{
-			state.value -= 1
-		},
-		incrementByAmount: (state, action) =>{
-			state.value += action.payload
-		},
-		findByName: (state) =>{
-			// let values = []
-			// state.map(n =>{
-			// 	if(n.name.includes(action.payload)){
-			// 		values.push(n)
-			// 	}
-			// })
-			
-			return console.log(state)
-		}
-	}
-})
+  name: 'products',
+  initialState,
+  extraReducers(builder) {
+    builder
+      .addCase(fetchProducts.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const loadedProducts = action.payload;
+        state.products = loadedProducts;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(addNewProduct.fulfilled, (state, action) => {
+        state.products.unshift(action.payload);
+      })
+      .addCase(deleteProduct.pending, (state, action) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.products.splice(
+          state.products.findIndex(
+            (product) => product._id === action.payload
+          ),
+          1
+        );
+      })
+	  .addCase(editProduct.pending, (state, action) => {
+        state.status = 'loading';
+      })
+	  .addCase(editProduct.fulfilled, (state, action) => {
+        // const { id } = action.payload;
+        const updatedProduct = action.payload.result;
+        state.status = 'succeeded';
 
+        const index = state.products.findIndex(
+          (element) => element._id === updatedProduct._id
+        );
+        state.products[index] = updatedProduct;
+      });
+  },
+});
 
-export const {increment, decrement, incrementByAmount, findByName} = productsSlice.actions
+export const selectAllProducts = (state) => state.products.products;
+export const getProductsStatus = (state) => state.products.status;
+export const getProductsError = (state) => state.products.error;
 
-export default productsSlice.reducer
+export default productsSlice.reducer;

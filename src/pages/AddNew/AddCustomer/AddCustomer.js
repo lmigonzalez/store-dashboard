@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import addCustomerStyles from './AddCustomer.module.css'
+import { useDispatch } from 'react-redux';
+import { addNewCustomer } from '../../../features/customers/customersSlice';
 import moment from 'moment';
 
 const AddCustomer = () => {
+  const dispatch = useDispatch()
   const customerInitialValues = {
-    customerName: '',
-    customerEmail: '',
-    customerPhone: '',
-    customerAddress: '',
-    category: 'standard',
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    plan: 'standard',
     date: moment().format('YYYY-MM-DD'),
   };
 
   const [customerValues, setCustomerValues] = useState(customerInitialValues);
 
   const onCustomerChange = (e) => {
+    if(e.target.name === 'phone'){
+      parseInt(e.target.value)
+    }
     setCustomerValues({
       ...customerValues,
       [e.target.name]: e.target.value,
@@ -23,7 +29,8 @@ const AddCustomer = () => {
 
   const onCustomerSubmit = (e) => {
     e.preventDefault();
-    console.log(customerValues);
+    // console.log(customerValues);
+    dispatch(addNewCustomer(customerValues))
   };
 
   return (
@@ -31,36 +38,36 @@ const AddCustomer = () => {
       <input
         type="text"
         placeholder="Customer Name"
-        name="customerName"
-        value={customerValues.customerName}
+        name="name"
+        value={customerValues.name}
         onChange={onCustomerChange}
       />
       <input
         type="email"
         placeholder="Customer Email"
-        name="customerEmail"
-        value={customerValues.customerEmail}
+        name="email"
+        value={customerValues.email}
         onChange={onCustomerChange}
       />
 
       <input
         type="tel"
         placeholder="Customer Phone"
-        name="customerPhone"
-        value={customerValues.customerPhone}
+        name="phone"
+        value={customerValues.phone}
         onChange={onCustomerChange}
       />
 
       <input
         type="text"
         placeholder="Customer Address"
-        name="customerAddress"
-        value={customerValues.customerAddress}
+        name="address"
+        value={customerValues.address}
         onChange={onCustomerChange}
       />
       <select
-        name="category"
-        value={customerValues.category}
+        name="plan"
+        value={customerValues.plan}
         onChange={onCustomerChange}
         className={addCustomerStyles.select}
       >

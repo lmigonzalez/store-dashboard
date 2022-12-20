@@ -74,14 +74,14 @@
 	margin-top: 5rem;
 }
 
-.download-pdf{
+.download_pdf{
 	/* background-color: blue; */
 	display:  flex;
 	justify-content: end;
 	align-items: center;
 }
 
-.download-pdf button{
+.download_pdf button{
 	height: 2rem;
 	padding: 0.3rem;
 	background-color: var(--green);
@@ -95,10 +95,38 @@
 	transition: 0.3s;
 }
 
-.download-pdf button:hover{
+.download_pdf button:hover{
 	background-color: var(--green-hover);
 }
 
-.download-pdf button svg{
+.download_pdf button svg{
 	margin-right: 0.5rem;
 }
+
+/* suggest */
+
+.suggest_list {
+	background-color: var(--light-black);
+	position: absolute;
+	z-index: 20;
+	border-radius: 0.2rem;
+	box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+	-webkit-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+  }
+  
+  .suggest_list ul {
+	list-style: none;
+	padding: 0.5rem 1rem;
+  }
+  
+  .suggest_list li {
+	margin: 0.3rem 0;
+	cursor: pointer;
+	font-size: 0.8rem;
+	border: none;
+  }
+  
+  .suggest_list li:hover{
+	  color: var(--purple);
+  }

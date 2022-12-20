@@ -1,0 +1,83 @@
+.content{
+	width: 100%;
+	height: 100%;
+	/* background-color: aquamarine; */
+	position: relative;
+
+}
+
+
+.content h1{
+	text-align: center;
+	margin-top: 2rem;
+	font-size: 2rem;
+}
+
+
+.content h2{
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+
+.content form{
+	width: 35rem;
+	max-width: 90%;
+	background-color: var(--light-black);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	/* align-items: center; */
+	padding: 2rem 1rem;
+	border-radius: 0.5rem;
+	box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+	-webkit-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.75);
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+}
+
+
+.content input{
+	width: 100%;
+	height: 2rem;
+	padding: 0 1rem;
+	margin-bottom: 0.5rem;
+	border: none;
+	border-radius: 0.3rem;
+	background-color: #fff;
+}
+
+.content input:focus{
+	background-color: #fff;
+}
+
+
+.content button{
+	width: 100%;
+	height: 2rem;
+	border-radius: 0.3rem;
+	border: none;
+	margin-top: 0.5rem;
+	background-color: var(--green);
+	font-weight: 600;
+	font-size: 1rem;
+	cursor: pointer;
+}
+
+.content div{
+	/* background-color: cadetblue; */
+	margin-top: 1rem;
+	text-align: end;
+}
+
+.forgot_password a{
+	font-weight: 600;
+}
+
+.forgot_password a:hover{
+	color: var(--purple);
+}

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import addProductStyles from './AddProduct.module.css'
+import { useDispatch } from 'react-redux';
+import { addNewProduct } from '../../../features/products/productsSlice';
 import moment from 'moment';
 
 const AddProduct = () => {
+  const dispatch = useDispatch()
+
   const productInitialValues = {
-    productName: '',
-    quantity: '',
-    price: '',
+    name: '',
+    quantity: 0,
+    price: 0,
     category: 'food',
     date: moment().format('YYYY-MM-DD'),
   };
@@ -22,7 +26,8 @@ const AddProduct = () => {
 
   const onProductSubmit = (e) => {
     e.preventDefault();
-    console.log(productValues);
+    console.log(productValues)
+    dispatch(addNewProduct(productValues))
   };
 
   return (
@@ -30,8 +35,8 @@ const AddProduct = () => {
       <input
         type="text"
         placeholder="Product Name"
-        value={productValues.productName}
-        name="productName"
+        value={productValues.name}
+        name="name"
         onChange={onProductChange}
       />
       <div></div>

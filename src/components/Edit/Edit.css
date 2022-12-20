@@ -69,3 +69,20 @@
   border: 1px solid var(--red);
   color: white;
 }
+
+.edit-select{
+  margin: 0.25rem 0;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  cursor: pointer;
+  height: 2rem;
+  width: 100%;
+	text-align: start;
+	background-color: #fff;
+	color: rgb(62, 61, 61);
+}
+
+.edit-select:hover{
+	background-color: #fff!important;
+}
+

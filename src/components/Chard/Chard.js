@@ -5,6 +5,10 @@ import { Chart as chartjs } from 'chart.js/auto';
 
 const LineChard = ({ chartData }) => {
   const options = {
+    borderWidth: 1,
+    pointRadius: 2,
+    fill: true,
+    backgroundColor: 'rgb(255, 99, 132)',
     scales: {
       x: {
         ticks: {
@@ -21,10 +25,10 @@ const LineChard = ({ chartData }) => {
       bodyFontColor: 'red',
     },
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
+        display: false,
         labels: {
           color: 'white',
         },

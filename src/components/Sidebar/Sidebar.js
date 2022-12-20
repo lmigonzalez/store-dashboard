@@ -1,6 +1,8 @@
 import sidebarStyles from './Sidebar.module.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {logout} from '../../features/auth/authSlice'
 
 import {
   AiOutlinePoweroff,
@@ -13,7 +15,7 @@ import {
 } from 'react-icons/ai';
 
 const Sidebar = () => {
-  
+  const dispatch = useDispatch()
   return (
     <div className={sidebarStyles.sidebar_container}>
       <div className={sidebarStyles.sidebar}>
@@ -45,7 +47,7 @@ const Sidebar = () => {
               {' '}
               <AiOutlineSetting /> <p>Settings</p>
             </NavLink>
-            <NavLink to="/">
+            <NavLink to="/login" onClick={()=> dispatch(logout())}>
               {' '}
               <AiOutlinePoweroff /> <p>Sign out</p>
             </NavLink>

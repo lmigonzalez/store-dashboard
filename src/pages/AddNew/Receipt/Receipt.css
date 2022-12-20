@@ -30,6 +30,10 @@
 
 .receipt-content table{
 	background-color: white;
+	border-spacing: 0;
+	border-collapse: separate;
+	table-layout: fixed;
+	width: 100%;
 }
 
 .receipt-content table tr{
