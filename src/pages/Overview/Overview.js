@@ -12,7 +12,8 @@ const Overview = () => {
 
   const [salesData, setSalesData] = useState({});
 
-  // const [sales, setSales] = useState([]);
+  const [customersData, setCustomersData] = useState({});
+  const [ordersData, setOrdersData] = useState({});
 
   useEffect(() => {
     setStartDate(getStartDate(7));
@@ -27,86 +28,48 @@ const Overview = () => {
 
   useEffect(() => {
     getSalesData();
+    getCustomersData();
+    getOrdersData();
   }, [selectedDays]);
 
   function getSalesData() {
     axios
-      .post('http://localhost:3032/api/get-sales', {
+      .post('http://localhost:3032/api/get-sales-resume', {
         selectedDays,
       })
       .then((res) => {
         setSalesData(res.data);
+        // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  const customersData = [
-    {
-      id: 1,
-      month: 'Jan',
-      sales: 234,
-    },
-    {
-      id: 2,
-      month: 'Feb',
-      sales: 154,
-    },
-    {
-      id: 3,
-      month: 'Mar',
-      sales: 1044,
-    },
-    {
-      id: 4,
-      month: 'Apr',
-      sales: 4,
-    },
-    {
-      id: 5,
-      month: 'May',
-      sales: 734,
-    },
-    {
-      id: 6,
-      month: 'Jun',
-      sales: 587,
-    },
-  ];
+  function getCustomersData() {
+    axios
+      .post('http://localhost:3032/api/get-customers-resume', {
+        selectedDays,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCustomersData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-  const ordersData = [
-    {
-      id: 1,
-      month: 'Jan',
-      sales: 234,
-    },
-    {
-      id: 2,
-      month: 'Feb',
-      sales: 11154,
-    },
-    {
-      id: 3,
-      month: 'Mar',
-      sales: 12044,
-    },
-    {
-      id: 4,
-      month: 'Apr',
-      sales: 4123,
-    },
-    {
-      id: 5,
-      month: 'May',
-      sales: 734,
-    },
-    {
-      id: 6,
-      month: 'Jun',
-      sales: 587,
-    },
-  ];
+  function getOrdersData() {
+    axios
+      .post('http://localhost:3032/api/get-orders-resume', { selectedDays })
+      .then((res) => {
+        setOrdersData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const [tab, setTab] = useState(1);
 
@@ -114,7 +77,7 @@ const Overview = () => {
     setTab(tabName);
   };
 
-  function graphData() {
+  function salesGraphData() {
     if (salesData.totalSalesPerMonth) {
       let graphicData = {
         labels: salesData.totalSalesPerMonth.map((m) =>
@@ -135,31 +98,50 @@ const Overview = () => {
     return 'no data';
   }
 
-  const [customers, setCustomers] = useState({
-    labels: customersData.map((m) => m.month),
-    datasets: [
-      {
-        label: 'Sales',
-        data: customersData.map((s) => s.sales),
-        backgroundColor: ['white'],
-        borderColor: 'white',
-        tension: 0.1,
-      },
-    ],
-  });
+  // const [customers, setCustomers] = useState({});
 
-  const [orders, setOrders] = useState({
-    labels: ordersData.map((m) => m.month),
-    datasets: [
-      {
-        label: 'Sales',
-        data: ordersData.map((s) => s.sales),
-        backgroundColor: ['white'],
-        borderColor: 'white',
-        tension: 0.1,
-      },
-    ],
-  });
+  function customersGraphData() {
+    if (customersData.customers) {
+      let graphicData = {
+        labels: customersData.customers.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Customers',
+            data: customersData.customers.map((o) => o.totalCustomers),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+
+      return graphicData;
+    }
+
+    return 'no data';
+  }
+
+  function ordersGraphData() {
+    if (ordersData.orders) {
+      let graphicData = {
+        labels: ordersData.orders.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Orders',
+            data: ordersData.orders.map((o) => o.totalOrders),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+      return graphicData;
+    }
+
+    return 'no data';
+  }
+
+  // const [orders, setOrders] = useState({});
 
   const getSelectedDate = (e) => {
     let date = parseInt(e.target.value);
@@ -207,9 +189,94 @@ const Overview = () => {
     }
   }
 
-  let resume = getTotalSalesResume();
+  function getOrdersResume() {
+    if (ordersData.totalOrders > ordersData.totalLastOrders) {
+      let isNumNegative = false;
+      let totalDifference = ordersData.totalOrders - ordersData.totalLastOrders;
+      let percentage = Math.abs(
+        ((parseInt(ordersData.totalOrders) -
+          parseInt(ordersData.totalLastOrders)) /
+          parseInt(ordersData.totalLastOrders)) *
+          100
+      );
 
-  let sales = graphData();
+      return {
+        isNumNegative,
+        totalDifference: totalDifference,
+        percentage: percentage.toFixed(2),
+      };
+    } else if (ordersData.totalOrders < ordersData.totalLastOrders) {
+      let isNumNegative = true;
+      let totalDifference = ordersData.totalOrders - ordersData.totalLastOrders;
+      let percentage = Math.abs(
+        ((parseInt(ordersData.totalOrders) -
+          parseInt(ordersData.totalLastOrders)) /
+          parseInt(ordersData.totalLastOrders)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: percentage.toFixed(2),
+      };
+    }
+  }
+
+  function getCustomerResume() {
+    if (customersData.totalCustomers > customersData.totalLastCustomers) {
+      let isNumNegative = false;
+
+      let totalDifference =
+        customersData.totalCustomers - customersData.totalLastCustomers;
+
+      let percentage = Math.abs(
+        ((parseInt(customersData.totalCustomers) -
+          parseInt(customersData.totalLastCustomers)) /
+          parseInt(customersData.totalLastCustomers)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: totalDifference,
+        percentage: percentage.toFixed(2),
+      };
+    } else if (
+      customersData.totalCustomers < customersData.totalLastCustomers
+    ) {
+      let isNumNegative = true;
+      let totalDifference =
+        customersData.totalCustomers - customersData.totalLastCustomers;
+      let percentage = Math.abs(
+        ((parseInt(customersData.totalCustomers) -
+          parseInt(customersData.totalLastCustomers)) /
+          parseInt(customersData.totalLastCustomers)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: percentage.toFixed(2),
+      };
+    } else if (
+      customersData.totalCustomers === customersData.totalLastCustomers
+    ) {
+      let isNumNegative = false;
+      let totalDifference = 0;
+      let percentage = 0;
+      return { isNumNegative, totalDifference, percentage };
+    }
+  }
+
+  let salesResume = getTotalSalesResume();
+  let ordersResume = getOrdersResume();
+  let customersResume = getCustomerResume();
+
+  let sales = salesGraphData();
+  let orders = ordersGraphData();
+  let customers = customersGraphData();
 
   return (
     <section className={overviewStyles.graph_container}>
@@ -246,18 +313,44 @@ const Overview = () => {
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </h2>
             <div>
-              {resume && (
+              {salesResume && (
                 <>
                   {' '}
                   <p>
-                    {resume.isNumNegative ? '-' : '+'}
-                    {resume.percentage}%
+                    {salesResume.isNumNegative ? '-' : '+'}
+                    {salesResume.percentage}%
                   </p>
                   <p>
-                    {resume.isNumNegative ? '-' : '+'} $
-                    {resume.totalDifference
+                    {salesResume.isNumNegative ? '-' : '+'} $
+                    {salesResume.totalDifference
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div
+            className={
+              tab === 3
+                ? `${overviewStyles.header_information} ${overviewStyles.selected}`
+                : overviewStyles.header_information
+            }
+            onClick={() => switchTab(3)}
+          >
+            <p>Orders</p>
+            <h2>{ordersData.totalOrders}</h2>
+            <div>
+              {ordersResume && (
+                <>
+                  <p>
+                    {ordersResume.isNumNegative ? '-' : '+'}
+                    {ordersResume.percentage}%
+                  </p>
+                  <p>
+                    {ordersResume.isNumNegative ? '-' : '+'}
+                    {ordersResume.totalDifference}
                   </p>
                 </>
               )}
@@ -273,26 +366,16 @@ const Overview = () => {
             onClick={() => switchTab(2)}
           >
             <p>Customers</p>
-            <h2>18,6783</h2>
+            <h2>{customersData.totalCustomers}</h2>
             <div>
-              <p>+6.2%</p>
-              <p>+1,765 this year</p>
-            </div>
-          </div>
-
-          <div
-            className={
-              tab === 3
-                ? `${overviewStyles.header_information} ${overviewStyles.selected}`
-                : overviewStyles.header_information
-            }
-            onClick={() => switchTab(3)}
-          >
-            <p>Orders</p>
-            <h2>6,785</h2>
-            <div>
-              <p>+15.2%</p>
-              <p>+825 this year</p>
+              <p>
+                {customersResume.isNumNegative ? '-' : '+'}
+                {customersResume.percentage}%
+              </p>
+              <p>
+                {customersResume.isNumNegative ? '-' : '+'}
+                {customersResume.totalDifference}
+              </p>
             </div>
           </div>
         </div>
