@@ -19,13 +19,6 @@ const Overview = () => {
     setStartDate(getStartDate(7));
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     setSalesData(await getSales(selectedDays));
-  //   };
-  //   getData();
-  // }, [selectedDays]);
-
   useEffect(() => {
     getSalesData();
     getCustomersData();
@@ -52,7 +45,6 @@ const Overview = () => {
         selectedDays,
       })
       .then((res) => {
-        console.log(res.data);
         setCustomersData(res.data);
       })
       .catch((err) => {
@@ -287,7 +279,7 @@ const Overview = () => {
             <option value={28}>Last 28 days</option>
             <option value={90}>Last 90 days</option>
             <option value={365}>Last 365 days</option>
-            <option value="*">From the beginning</option>
+            {/* <option value="*">From the beginning</option> */}
           </select>
           <div>
             {`FROM: ${startDate} - TO: ${moment().format('MMM DD YYYY')}`}

@@ -7,6 +7,7 @@ import AddNew from './pages/AddNew/AddNew';
 import Overview from './pages/Overview/Overview';
 import Products from './pages/Products/Products';
 import Orders from './pages/Orders/Orders';
+import Settings from './pages/Settings/Settings';
 import Login from './pages/Login/Login';
 
 import ProductDetails from './pages/Products/ProductDetails';
@@ -54,7 +55,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/customer/:id" element={<CustomerDetails />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/order/:id" element={<OrderDetails />} />
+            <Route path="/settings" element={<Settings/>} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

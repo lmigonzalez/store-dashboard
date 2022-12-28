@@ -21,7 +21,7 @@ const Orders = () => {
 
   const rowRef = useRef([]);
   const [position, setPosition] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('client');
+  const [selectedCategory, setSelectedCategory] = useState('clientName');
 
   const [keyword, setKeyWord] = useState('');
 
@@ -30,6 +30,7 @@ const Orders = () => {
   const [orderDetails, setOrderDetails] = useState(false);
   const [orderSelectedData, setOrderSelectedData] = useState({});
   const [rowSelected, setRowSelected] = useState(-1);
+  // console.log(ordersData)
 
   const tableData = {
     data:
@@ -176,11 +177,9 @@ const Orders = () => {
       <div className={orderStyles.search_container}>
         <div className={orderStyles.search_bar}>
           <select name="search" onChange={onSelectCategory}>
-            <option value="client">client</option>
-            <option value="products">products</option>
-            <option value="total">total</option>
+            <option value="clientName">client</option>
             <option value="date">date</option>
-            <option value="order">order</option>
+            <option value="_id">order</option>
           </select>
           <input
             value={keyword}

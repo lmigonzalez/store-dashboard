@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import moment from 'moment';
 import customerDetailsStyles from './CustomerDetails.module.css';
@@ -7,9 +8,7 @@ import { getStartDate } from '../../utils/getStartDate';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  getCustomersStatus,
-} from '../../features/customers/customersSlice';
+import { getCustomersStatus } from '../../features/customers/customersSlice';
 
 import {
   AiOutlineDelete,
@@ -77,8 +76,8 @@ function CustomerDetails() {
   const [customerInformation, setCustomerInformation] = useState({});
   // const [date, setDate] = useState('');
   const [customerSince, setCustomerSince] = useState('');
-
-  // useSelector(state => state.customers.customers)
+  const [selectedDays, setSelectedDays] = useState(7);
+  const [customerData, setCustomerData] = useState({});
 
   const [startDate, setStartDate] = useState('');
 
@@ -92,6 +91,26 @@ function CustomerDetails() {
 
     getMonthsDifference(data.date);
   }, [customersStatus, dispatch]);
+
+  useEffect(() => {
+    getCustomerSpentInformation();
+  }, [selectedDays]);
+
+  function getCustomerSpentInformation() {
+    let clientId = JSON.parse(localStorage.getItem('subjectName'));
+    axios
+      .post('http://localhost:3032/api/get-customer-information', {
+        clientId: clientId._id,
+        selectedDays: selectedDays,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setCustomerData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   function getMonthsDifference(date) {
     let fullDate = '';
@@ -119,6 +138,146 @@ function CustomerDetails() {
     setCustomerSince(fullDate);
   }
 
+  function customerGraphData() {
+    if (customerData.customerSpent) {
+      let graphicData = {
+        labels: customerData.customerSpent.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Product',
+            data: customerData.customerSpent.map((o) => o.total),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+      return graphicData;
+    }
+    return 'no data';
+  }
+
+  function customerUnitsGraphData() {
+    if (customerData.unitsSoldResult) {
+      let graphicData = {
+        labels: customerData.unitsSoldResult.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Product',
+            data: customerData.unitsSoldResult.map((o) => o.total),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+      return graphicData;
+    }
+    return 'no data';
+  }
+
+  const getCustomerResume = () => {
+    if (
+      parseFloat(customerData.totalSpent) >=
+      parseFloat(customerData.totalLastSpent)
+    ) {
+      let isNumNegative = false;
+
+      let totalDifference =
+        customerData.totalSpent - customerData.totalLastSpent;
+
+      let percentage;
+      if (customerData.totalLastSpent > 0) {
+        percentage = Math.abs(
+          ((parseInt(customerData.totalSpent) -
+            parseInt(customerData.totalLastSpent)) /
+            parseInt(customerData.totalLastSpent)) *
+            100
+        );
+      } else {
+        percentage = customerData.totalSpent;
+      }
+
+      console.log(percentage);
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference).toFixed(2),
+        percentage: parseFloat(percentage).toFixed(2),
+      };
+    } else if (
+      parseFloat(customerData.totalSpent) <
+      parseFloat(customerData.totalLastSpent)
+    ) {
+      let isNumNegative = true;
+
+      let totalDifference =
+        customerData.totalSpent - customerData.totalLastSpent;
+
+      let percentage = Math.abs(
+        ((parseInt(customerData.totalSpent) -
+          parseInt(customerData.totalLastSpent)) /
+          parseInt(customerData.totalLastSpent)) *
+          100
+      );
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference).toFixed(2),
+        percentage: percentage.toFixed(2),
+      };
+    }
+  };
+
+  const getCustomerUnitsResume = () => {
+    if (
+      parseFloat(customerData.totalOrders) >=
+      parseFloat(customerData.lastTotalOrders)
+    ) {
+      let isNumNegative = false;
+
+      let totalDifference =
+        customerData.totalOrders - customerData.lastTotalOrders;
+
+      let percentage;
+      if (customerData.lastTotalOrders > 0) {
+        percentage = Math.abs(
+          ((parseInt(customerData.totalOrders) -
+            parseInt(customerData.lastTotalOrders)) /
+            parseInt(customerData.lastTotalOrders)) *
+            100
+        );
+      } else {
+        percentage = customerData.totalOrders;
+      }
+
+      console.log(percentage);
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: parseFloat(percentage).toFixed(2),
+      };
+    } else if (
+      parseFloat(customerData.totalOrders) <
+      parseFloat(customerData.lastTotalOrders)
+    ) {
+      let isNumNegative = true;
+
+      let totalDifference =
+        customerData.totalOrders - customerData.lastTotalOrders;
+
+      let percentage = Math.abs(
+        ((parseInt(customerData.totalOrders) -
+          parseInt(customerData.lastTotalOrders)) /
+          parseInt(customerData.lastTotalOrders)) *
+          100
+      );
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: percentage.toFixed(2),
+      };
+    }
+  };
+
   const switchTab = (tabName) => {
     setTab(tabName);
   };
@@ -141,7 +300,15 @@ function CustomerDetails() {
   const getSelectedDate = (e) => {
     let date = parseInt(e.target.value);
     setStartDate(getStartDate(date));
+    setSelectedDays(date);
   };
+
+  let customer = customerGraphData();
+  let customerUnitsSold = customerUnitsGraphData();
+
+  let customerResume = getCustomerResume();
+  let customerUnitsResume = getCustomerUnitsResume();
+  console.log(customerUnitsResume);
 
   return (
     <section className={customerDetailsStyles.graph_container}>
@@ -163,12 +330,11 @@ function CustomerDetails() {
             <div>
               <AiOutlineUser /> {customerInformation.name}
             </div>
-            <div style={{cursor: 'pointer'}}>
+            <div style={{ cursor: 'pointer' }}>
               <CopyToClipboard text={customerInformation.phone}>
                 <span>
-                  <AiOutlinePhone/> {customerInformation.phone}
+                  <AiOutlinePhone /> {customerInformation.phone}
                 </span>
-                
               </CopyToClipboard>
             </div>
           </div>
@@ -185,7 +351,6 @@ function CustomerDetails() {
               <option value={28}>Last 28 days</option>
               <option value={90}>Last 90 days</option>
               <option value={365}>Last 365 days</option>
-              <option value="*">From the beginning</option>
             </select>
             <div>
               <AiOutlineForm onClick={onEdit} />
@@ -204,10 +369,26 @@ function CustomerDetails() {
             onClick={() => switchTab(1)}
           >
             <p>Total Spent</p>
-            <h2>$6,500.00</h2>
+            <h2>${parseFloat(customerData.totalSpent).toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h2>
             <div>
-              <p>+14.2%</p>
-              <p>$5,070.00 last 365 days</p>
+              {customerResume && (
+                <>
+                  <p>
+                    {customerResume.isNumNegative ? '-' : '+'}
+                    {customerResume.percentage
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    %
+                  </p>
+                  <p>
+                    {customerResume.isNumNegative ? '-' : '+'}$
+                    {customerResume.totalDifference
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -220,10 +401,21 @@ function CustomerDetails() {
             onClick={() => switchTab(2)}
           >
             <p>Sold Orders</p>
-            <h2>210</h2>
+            <h2>{customerData.totalOrders}</h2>
             <div>
-              <p>+6.2%</p>
-              <p>+80 last 365 days</p>
+              {customerUnitsResume && (
+                <>
+                  {' '}
+                  <p>
+                    {customerUnitsResume.isNumNegative ? '-' : '+'}
+                    {customerUnitsResume.percentage}%
+                  </p>
+                  <p>
+                    {customerUnitsResume.isNumNegative ? '-' : '+'}
+                    {customerUnitsResume.totalDifference}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -237,9 +429,18 @@ function CustomerDetails() {
         </div>
 
         <div className={customerDetailsStyles.body_content}>
-          {tab === 1 && <LineChard className="chard" chartData={sales} />}
-          {tab === 2 && <LineChard className="chard" chartData={sales} />}
-          {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}
+          {customer.labels && (
+            <>
+              {' '}
+              {tab === 1 && (
+                <LineChard className="chard" chartData={customer} />
+              )}
+              {tab === 2 && (
+                <LineChard className="chard" chartData={customerUnitsSold} />
+              )}
+              {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}
+            </>
+          )}
         </div>
       </div>
     </section>

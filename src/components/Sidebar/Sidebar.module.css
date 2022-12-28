@@ -53,22 +53,42 @@
 .links .active svg {
   color: var(--purple);
 }
+
+
 .settings_container {
   border-top: 3px solid var(--light-black);
-  padding: 1rem;
+  padding: 1rem 0;
   position: absolute;
   bottom: 0;
   width: 100%;
 }
 
 .settings {
-  text-align: left;
+  padding-right: 1rem;
   display: flex;
   flex-direction: column;
+ 
 }
 
 .settings a {
+  padding: 0.3rem 1rem;
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+
+.settings svg{
+  margin-right: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.settings .active {
+  border-radius: 0 2rem 2rem 0;
+  background-color: var(--light-black);
+}
+
+
+.settings .active svg {
+  color: var(--purple);
 }

@@ -43,7 +43,7 @@ const Sidebar = () => {
         </div>
         <div className={sidebarStyles.settings_container}>
           <div className={sidebarStyles.settings}>
-            <NavLink to="/">
+            <NavLink to="/settings" className={({isActive}) => isActive ? sidebarStyles.active : ''}>
               {' '}
               <AiOutlineSetting /> <p>Settings</p>
             </NavLink>

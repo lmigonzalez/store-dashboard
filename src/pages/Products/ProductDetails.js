@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import {getProductsStatus} from '../../features/products/productsSlice'
+import { getProductsStatus } from '../../features/products/productsSlice';
 
-
+import axios from 'axios';
 import moment from 'moment';
 import LineChard from '../../components/Chard/Chard';
 
@@ -18,8 +18,7 @@ import BackBtn from '../../components/BackBtn/BackBtn';
 import { getStartDate } from '../../utils/getStartDate';
 
 const ProductDetails = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const productsStatus = useSelector(getProductsStatus);
 
   const [tab, setTab] = useState(1);
@@ -57,21 +56,11 @@ const ProductDetails = () => {
       sales: 1587,
     },
   ];
-  const [sales, setSales] = useState({
-    labels: data.map((m) => m.month),
-    datasets: [
-      {
-        label: 'Sales',
-        data: data.map((s) => s.sales),
-        backgroundColor: ['white'],
-        borderColor: 'white',
-        tension: 0.1,
-      },
-    ],
-  });
 
   const [product, setProduct] = useState({});
-
+  const [productData, setProductData] = useState({});
+  const [unitsData, setUnitsData] = useState({});
+  const [selectedDays, setSelectedDays] = useState(7);
   const [startDate, setStartDate] = useState('');
 
   useEffect(() => {
@@ -82,6 +71,65 @@ const ProductDetails = () => {
     let data = JSON.parse(localStorage.getItem('subjectName'));
     setProduct(data);
   }, [productsStatus, dispatch]);
+
+  useEffect(() => {
+    getProductSalesData();
+  }, [selectedDays]);
+
+  function getProductSalesData() {
+    let productId = JSON.parse(localStorage.getItem('subjectName'));
+
+    axios
+      .post('http://localhost:3032/api/get-product-information', {
+        productId: productId._id,
+        selectedDays: selectedDays,
+      })
+      .then((res) => {
+        setProductData(res.data[0]);
+        setUnitsData(res.data[1]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function productGraphData() {
+    if (productData.products) {
+      let graphicData = {
+        labels: productData.products.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Product',
+            data: productData.products.map((o) => o.total),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+      return graphicData;
+    }
+    return 'no data';
+  }
+
+  function unitsGraphData() {
+    if (unitsData.unitsSold) {
+      let graphicData = {
+        labels: unitsData.unitsSold.map((o) => o.date),
+        datasets: [
+          {
+            label: 'Product',
+            data: unitsData.unitsSold.map((o) => o.total),
+            backgroundColor: ['rgba(120, 88, 166, 0.5)'],
+            borderColor: '#7858a6',
+            // tension: 0.1,
+          },
+        ],
+      };
+      return graphicData;
+    }
+    return 'no data';
+  }
 
   const switchTab = (tabName) => {
     setTab(tabName);
@@ -105,7 +153,105 @@ const ProductDetails = () => {
   const getSelectedDate = (e) => {
     let date = parseInt(e.target.value);
     setStartDate(getStartDate(date));
+    setSelectedDays(date);
   };
+
+  const getProductSoldResume = () => {
+    if (
+      parseFloat(productData.totalProductSold) >
+      parseFloat(productData.lastTotalProductSold)
+    ) {
+      let isNumNegative = false;
+
+      let totalDifference =
+        productData.totalProductSold - productData.lastTotalProductSold;
+
+      let percentage = Math.abs(
+        ((parseInt(productData.totalProductSold) -
+          parseInt(productData.lastTotalProductSold)) /
+          parseInt(productData.lastTotalProductSold)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference).toFixed(2),
+        percentage: percentage.toFixed(2),
+      };
+    } else if (
+      parseFloat(productData.totalProductSold) <
+      parseFloat(productData.lastTotalProductSold)
+    ) {
+      let isNumNegative = true;
+
+      let totalDifference =
+        productData.totalProductSold - productData.lastTotalProductSold;
+
+      let percentage = Math.abs(
+        ((parseInt(productData.totalProductSold) -
+          parseInt(productData.lastTotalProductSold)) /
+          parseInt(productData.lastTotalProductSold)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference).toFixed(2),
+        percentage: percentage.toFixed(2),
+      };
+    }
+  };
+
+  const getUnitsResume = () => {
+    if (
+      parseFloat(unitsData.totalUnitsSold) >
+      parseFloat(unitsData.lastTotalUnitsSold)
+    ) {
+      let isNumNegative = false;
+
+      let totalDifference =
+        unitsData.totalUnitsSold - unitsData.lastTotalUnitsSold;
+
+      let percentage = Math.abs(
+        ((parseInt(unitsData.totalUnitsSold) -
+          parseInt(unitsData.lastTotalUnitsSold)) /
+          parseInt(unitsData.lastTotalUnitsSold)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: percentage.toFixed(2),
+      };
+    } else if (
+      parseFloat(unitsData.totalUnitsSold) <
+      parseFloat(unitsData.lastTotalUnitsSold)
+    ) {
+      let isNumNegative = true;
+
+      let totalDifference =
+        unitsData.totalUnitsSold - unitsData.lastTotalUnitsSold;
+
+      let percentage = Math.abs(
+        ((parseInt(unitsData.totalUnitsSold) -
+          parseInt(unitsData.lastTotalUnitsSold)) /
+          parseInt(unitsData.lastTotalUnitsSold)) *
+          100
+      );
+
+      return {
+        isNumNegative,
+        totalDifference: Math.abs(totalDifference),
+        percentage: percentage.toFixed(2),
+      };
+    }
+  };
+
+  let productResume = getProductSoldResume();
+  let unitsResume = getUnitsResume();
+  let products = productGraphData();
+  const units = unitsGraphData();
 
   return (
     <section className={productDetailsStyles.graph_container}>
@@ -137,7 +283,6 @@ const ProductDetails = () => {
               <option value={28}>Last 28 days</option>
               <option value={90}>Last 90 days</option>
               <option value={365}>Last 365 days</option>
-              <option value="*">From the beginning</option>
             </select>
             <div>
               <AiOutlineForm onClick={onEdit} />
@@ -156,10 +301,27 @@ const ProductDetails = () => {
             onClick={() => switchTab(1)}
           >
             <p>Total Sold</p>
-            <h2>$7,000.00</h2>
+            <h2>
+              $
+              {parseFloat(productData.totalProductSold)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </h2>
             <div>
-              <p>+14.2%</p>
-              <p>+22,870.00 this year</p>
+              {productResume && (
+                <>
+                  <p>
+                    {productResume.isNumNegative ? '-' : '+'}
+                    {productResume.percentage}%
+                  </p>
+                  <p>
+                    {productResume.isNumNegative ? '-' : '+'}$
+                    {productResume.totalDifference
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -172,10 +334,25 @@ const ProductDetails = () => {
             onClick={() => switchTab(2)}
           >
             <p>Sold Units</p>
-            <h2>545</h2>
+            <h2>
+              {parseFloat(unitsData.totalUnitsSold)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </h2>
             <div>
-              <p>+6.2%</p>
-              <p>+1,765 this year</p>
+              {unitsResume && (
+                <>
+                  {' '}
+                  <p>
+                    {unitsResume.isNumNegative ? '-' : '+'}
+                    {unitsResume.percentage}%
+                  </p>
+                  <p>
+                    {unitsResume.isNumNegative ? '-' : '+'}
+                    {unitsResume.totalDifference}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -183,16 +360,24 @@ const ProductDetails = () => {
             <p>Units Available</p>
             <h2>{product.quantity}</h2>
             <div>
-              <p>+15.2%</p>
-              <p>+825 this year</p>
+              <p style={{ color: 'transparent' }}> '' </p>
             </div>
           </div>
         </div>
 
         <div className={productDetailsStyles.body_content}>
-          {tab === 1 && <LineChard className="chard" chartData={sales} />}
-          {tab === 2 && <LineChard className="chard" chartData={sales} />}
-          {/* {tab === 3 && <LineChard className="chard" chartData={sales} />} */}
+          {products.labels && (
+            <>
+              {' '}
+              {tab === 1 && (
+                <LineChard className="chard" chartData={products} />
+              )}
+              {tab === 2 && <LineChard className="chard" chartData={units} />}
+              {tab === 3 && (
+                <LineChard className="chard" chartData={products} />
+              )}
+            </>
+          )}
         </div>
       </div>
     </section>
