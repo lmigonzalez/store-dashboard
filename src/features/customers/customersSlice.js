@@ -46,7 +46,7 @@ export const customersSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(fetchCustomers.pending, (state, action) => {
+      .addCase(fetchCustomers.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchCustomers.fulfilled, (state, action) => {
@@ -54,14 +54,17 @@ export const customersSlice = createSlice({
         const loadedCustomers = action.payload;
         state.customers = loadedCustomers;
       })
-      .addCase(fetchCustomers.rejected, (state, action) => {
+      .addCase(fetchCustomers.rejected, (state) => {
         state.status = 'failed';
-        state.error = action.error.message;
       })
       .addCase(addNewCustomer.fulfilled, (state, action) => {
         state.customers.unshift(action.payload);
+        state.status = 'succeeded';
       })
-      .addCase(deleteCustomer.pending, (state, action) => {
+      .addCase(addNewCustomer.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(deleteCustomer.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(deleteCustomer.fulfilled, (state, action) => {
@@ -71,8 +74,12 @@ export const customersSlice = createSlice({
           ),
           1
         );
+        state.status = 'succeeded';
       })
-      .addCase(editCustomer.pending, (state, action) => {
+      .addCase(deleteCustomer.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(editCustomer.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(editCustomer.fulfilled, (state, action) => {
@@ -84,16 +91,9 @@ export const customersSlice = createSlice({
           (element) => element._id === updatedCustomer._id
         );
         state.customers[index] = updatedCustomer;
-
-        // let data = [];
-        // state.customers.map((element) => {
-        //   if (element._id === updatedCustomer._id) {
-        //     data.push(updatedCustomer);
-        //   } else {
-        //     data.push(element);
-        //   }
-        // });
-        // state.customers = data;
+      })
+      .addCase(editCustomer.rejected, (state) => {
+        state.status = 'failed';
       });
   },
 });
@@ -102,7 +102,5 @@ export const selectAllCustomers = (state) => state.customers.customers;
 export const getCustomersStatus = (state) => state.customers.status;
 export const getCustomersError = (state) => state.customers.error;
 
-// export const { increment, decrement, incrementByAmount } =
-//   customersSlice.actions;
 
 export default customersSlice.reducer;

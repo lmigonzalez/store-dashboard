@@ -1,44 +1,102 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateAccount } from '../../features/auth/authSlice';
+import { userInformation } from '../../features/auth/authSlice';
+import { populateMessage } from '../../features/notification/notification.Slice';
 import settingsStyles from './Settings.module.css';
 import { AiFillDelete, AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
+
+import DeleteUser from './DeleteUser';
+import UserStatus from './UserStatus';
+
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState(3);
+  const dispatch = useDispatch();
+  const initialUserInformation = {
+    securityQuestion: 'What was your childhood nickname?',
+    securityAnswer: '',
+    password: '',
+    repeatPassword: '',
+  };
+
+  const initialNewUser = {
+    name: '',
+    email: '',
+    isAdmin: false,
+  };
+
+  // const initialUserStatusData = {
+  //   id: '',
+  //   isAdmin: false,
+  // };
+
+  const [activeTab, setActiveTab] = useState(1);
   const [radioSelected, setRadioSelected] = useState('yes');
   const [admin, setAdmin] = useState(false);
   const [newUser, setNewUser] = useState(false);
-  // let admin = true
-  const users = [
-    {
-      name: 'Luis',
-      email: 'luis@gmail.com',
-      admin: true,
-    },
-    {
-      name: 'Ronald',
-      email: 'ronald@gmail.com',
-      admin: false,
-    },
-    {
-      name: 'Micky',
-      email: 'micky@gmail.com',
-      admin: false,
-    },
-    {
-      name: 'Julian',
-      email: 'julian@gmail.com',
-      admin: false,
-    },
-    {
-      name: 'Mat',
-      email: 'mat@gmail.com',
-      admin: true,
-    },
-    {
-      name: 'Frank',
-      email: 'frank@gmail.com',
-      admin: false,
-    },
-  ];
+  const [newUserData, setNewUserData] = useState(initialUserInformation);
+  const [createdUser, setCreatedUser] = useState(initialNewUser);
+  const [allUsers, setAllUsers] = useState([]);
+  const userInf = useSelector(userInformation);
+
+  const [deleteUser, setDeleteUser] = useState(false);
+  const [changeUser, setChangeUser] = useState(false);
+
+  const [userToDelete, setUserToDelete] = useState({});
+  const [userToChange, setUserToChange] = useState({});
+  const [userStatusValue, setUserStatusValue] = useState();
+
+  useEffect(() => {
+    getUserInformation();
+  }, [newUser]);
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const getAllUsers = () => {
+    axios
+      .get('http://localhost:3032/api/get-all-users')
+      .then((res) => {
+        setAllUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onDeleteCancel = () => {
+    setDeleteUser(false);
+  };
+
+  const onChangeCancel = () => {
+    setChangeUser(false);
+    getAllUsers();
+  };
+
+  const getUserInformation = () => {
+    setAdmin(userInf.isAdmin);
+
+    if (userInf.securityQuestion.length === 0) {
+      setNewUser(true);
+    } else {
+      setNewUser(false);
+    }
+  };
+
+  const accountChange = (e) => {
+    setNewUserData({
+      ...newUserData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const newUserChange = (e) => {
+    setCreatedUser({
+      ...createdUser,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   let selectOptions = [
     'What was your childhood nickname?',
@@ -53,14 +111,104 @@ const Settings = () => {
     "What is your oldest cousin's first and last name?",
     'What was the name of your first stuffed animal?',
   ];
+
   const cancelSubmit = () => {};
 
-  const submitChanges = (e) => {
+  const submitAccountChanges = (e) => {
     e.preventDefault();
+    if (newUserData.password === newUserData.repeatPassword) {
+      axios
+        .patch('http://localhost:3032/api/update-user-account', {
+          newUserData,
+          id: userInf.id,
+        })
+        .then(({ data }) => {
+          dispatch(updateAccount(data));
+          dispatch(
+            populateMessage({
+              message: 'Password updated successfully',
+              messageStatus: true,
+              showNotification: true,
+            })
+          );
+          setNewUserData(initialUserInformation);
+          setNewUser(false);
+        })
+        .catch(() => {
+          dispatch(
+            populateMessage({
+              message: "The password wasn't updated successfully",
+              messageStatus: false,
+              showNotification: true,
+            })
+          );
+          setNewUserData(initialUserInformation);
+        });
+    } else {
+      console.log('Make sure password match');
+    }
+  };
+
+  const submitCreatedUser = (e) => {
+    e.preventDefault();
+    axios
+      .post('http://localhost:3032/api/new-user', createdUser)
+      .then(() => {
+        dispatch(
+          populateMessage({
+            message: 'User crated successfully',
+            messageStatus: true,
+            showNotification: true,
+          })
+        );
+        setCreatedUser(initialNewUser);
+        getAllUsers();
+      })
+      .catch(() => {
+        dispatch(
+          populateMessage({
+            message: "The user wasn't created successfully",
+            messageStatus: false,
+            showNotification: true,
+          })
+        );
+      });
   };
 
   const handleRadio = (e) => {
+    let value;
+    if (e.target.value === 'true') {
+      value = true;
+    } else if (e.target.value === 'false') {
+      value = false;
+    }
     setRadioSelected(e.target.value);
+    setCreatedUser({
+      ...createdUser,
+      isAdmin: value,
+    });
+  };
+
+  const handleDelete = (user) => {
+    let id = user._id;
+    setUserToDelete(user);
+    setDeleteUser(true);
+  };
+
+  const handleStatusChange = (user, index) => (e) => {
+    let value;
+    if (e.target.value === 'true') {
+      setUserStatusValue(true);
+      value = true;
+    } else if (e.target.value === 'false') {
+      setUserStatusValue(false);
+      value = false;
+    }
+    let users = [...allUsers];
+    users[index].isAdmin = value;
+    setAllUsers(users);
+    setChangeUser(true);
+    setUserToChange(user);
   };
 
   return (
@@ -70,121 +218,172 @@ const Settings = () => {
         <>
           <div className={settingsStyles.tabs}>
             <button
-              onClick={() => setActiveTab(1)}
-              className={activeTab === 1 && settingsStyles.active}
+              onClick={() => (
+                setActiveTab(1), setDeleteUser(false), setChangeUser(false)
+              )}
+              className={activeTab === 1 ? settingsStyles.active : ''}
             >
-              Change Password
+              {newUser ? 'Setup Account' : 'Change Password'}
             </button>
             <button
-              onClick={() => setActiveTab(2)}
-              className={activeTab === 2 && settingsStyles.active}
+              onClick={() => (
+                setActiveTab(2), setDeleteUser(false), setChangeUser(false)
+              )}
+              className={activeTab === 2 ? settingsStyles.active : ''}
             >
               New User
             </button>
             <button
-              onClick={() => setActiveTab(3)}
-              className={activeTab === 3 && settingsStyles.active}
+              onClick={() => (setActiveTab(3), getAllUsers())}
+              className={activeTab === 3 ? settingsStyles.active : ''}
             >
               All Users
             </button>
           </div>
           <div className={settingsStyles.body}>
             {activeTab === 1 && (
-              <form onSubmit={submitChanges}>
-                <p>Question: Which country was the first one you visited?</p>
-                <input type="text" placeholder="Answer" />
-                <input type="password" placeholder="New Password" />
-                <input type="password" placeholder="Repeat New Password" />
+              <form onSubmit={submitAccountChanges} autoComplete="off">
+                {newUser ? (
+                  <select
+                    name="securityQuestion"
+                    value={newUserData.securityQuestion}
+                    onChange={accountChange}
+                  >
+                    {selectOptions.map((i, index) => {
+                      return <option key={index}>{i}</option>;
+                    })}
+                  </select>
+                ) : (
+                  <p>Question: {userInf.securityQuestion}</p>
+                )}
+
+                <input
+                  type="text"
+                  placeholder="Answer"
+                  name="securityAnswer"
+                  value={newUserData.securityAnswer}
+                  onChange={accountChange}
+                />
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  name="password"
+                  value={newUserData.password}
+                  onChange={accountChange}
+                />
+                <input
+                  type="password"
+                  placeholder="Repeat New Password"
+                  name="repeatPassword"
+                  value={newUserData.repeatPassword}
+                  onChange={accountChange}
+                />
                 <button type="submit">Change Password</button>
                 <button onClick={cancelSubmit}>Cancel</button>
               </form>
             )}
             {activeTab === 2 && (
-              <form onSubmit={submitChanges}>
-                <p>Question: Which country was the first one you visited?</p>
-                <input type="text" placeholder="User Name" />
-                <input type="email" placeholder="User Email" />
+              <form onSubmit={submitCreatedUser} autoComplete="off">
+                <input
+                  type="text"
+                  placeholder="User Name"
+                  name="name"
+                  value={createdUser.name}
+                  onChange={newUserChange}
+                />
+                <input
+                  type="email"
+                  placeholder="User Email"
+                  name="email"
+                  value={createdUser.email}
+                  onChange={newUserChange}
+                />
                 <div className={settingsStyles.radios}>
                   <p>Admin?</p>
-                  <label for="yes">Yes</label>
+                  <label>Yes</label>
                   <input
                     type="radio"
                     id="yes"
                     name="admin"
-                    value="yes"
-                    checked={radioSelected === 'yes'}
-                    onChange={handleRadio}
+                    value={true}
+                    onClick={handleRadio}
                   />
-                  <label for="no">No</label>
+                  <label>No</label>
                   <input
                     type="radio"
                     id="no"
                     name="admin"
-                    value="no"
-                    checked={radioSelected === 'no'}
-                    onChange={handleRadio}
+                    value={false}
+                    defaultChecked
+                    onClick={handleRadio}
                   />
                 </div>
 
-                <button type="submit">Change Password</button>
+                <button type="submit">Add New User</button>
                 <button onClick={cancelSubmit}>Cancel</button>
               </form>
             )}
             {activeTab === 3 && (
-              <di className={settingsStyles.users}>
+              <div className={settingsStyles.users}>
+                {deleteUser && !changeUser && (
+                  <DeleteUser
+                    onDeleteCancel={onDeleteCancel}
+                    userToDelete={userToDelete}
+                    getAllUsers={getAllUsers}
+                    setDeleteUser={setDeleteUser}
+                  />
+                )}
+                {changeUser && !deleteUser && (
+                  <UserStatus
+                    userToChange={userToChange}
+                    onChangeCancel={onChangeCancel}
+                    userStatusValue={userStatusValue}
+                    getAllUsers={getAllUsers}
+                    setChangeUser={setChangeUser}
+                  />
+                )}
                 <table>
                   <thead>
                     <tr>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Is Admin?</th>
-                      <th>Confirm</th>
                       <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map((u, i) => {
+                    {allUsers.map((u, i) => {
                       return (
-                        <tr>
+                        <tr key={i}>
                           <td>{u.name}</td>
                           <td>{u.email}</td>
                           <td>
                             <div className={settingsStyles.radios}>
-                              <p>Admin?</p>
-                              <label for="yes">Yes</label>
+                              {/* <p>Admin?</p> */}
+                              <label>Yes</label>
                               <input
                                 type="radio"
-                                id="yes"
                                 name={i}
                                 value={true}
-                                defaultChecked={u.admin === true}
-                                onChange={handleRadio}
+                                checked={u.isAdmin === true}
+                                onChange={handleStatusChange(u, i)}
                               />
-                              <label for="no">No</label>
+                              <label>No</label>
                               <input
                                 type="radio"
-                                id="no"
                                 name={i}
                                 value={false}
-                                defaultChecked={u.admin === false}
-                                onChange={handleRadio}
+                                checked={u.isAdmin === false}
+                                onChange={handleStatusChange(u, i)}
                               />
                             </div>
                           </td>
                           <td>
                             {' '}
-                            <button>
-                              {' '}
-                              <AiOutlineCheck />{' '}
-                            </button>
-                            <button>
-                              {' '}
-                              <AiOutlineClose />{' '}
-                            </button>
-                          </td>
-                          <td>
-                            {' '}
-                            <button className={settingsStyles.delete_btn}>
+                            <button
+                              className={settingsStyles.delete_btn}
+                              onClick={() => handleDelete(u)}
+                            >
                               {' '}
                               <AiFillDelete />{' '}
                             </button>
@@ -194,7 +393,7 @@ const Settings = () => {
                     })}
                   </tbody>
                 </table>
-              </di>
+              </div>
             )}
           </div>
         </>
@@ -204,19 +403,42 @@ const Settings = () => {
         <div className={settingsStyles.body}>
           <h2>Change Password</h2>
 
-          <form onSubmit={submitChanges}>
+          <form onSubmit={submitAccountChanges} autoComplete="off">
             {newUser ? (
-              <select>
-                {selectOptions.map((i) => {
-                  return <option>{i}</option>;
+              <select
+                name="securityQuestion"
+                value={newUserData.securityQuestion}
+                onChange={accountChange}
+              >
+                {selectOptions.map((i, index) => {
+                  return <option key={index}>{i}</option>;
                 })}
               </select>
             ) : (
-              <p>Question: Which country was the first one you visited?</p>
+              <p>Question: {userInf.securityQuestion}</p>
             )}
-            <input type="text" placeholder="Security Question" />
-            <input type="password" placeholder="New Password" />
-            <input type="password" placeholder="Repeat New Password" />
+
+            <input
+              type="text"
+              placeholder="Answer"
+              name="securityAnswer"
+              value={newUserData.securityAnswer}
+              onChange={accountChange}
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              name="password"
+              value={newUserData.password}
+              onChange={accountChange}
+            />
+            <input
+              type="password"
+              placeholder="Repeat New Password"
+              name="repeatPassword"
+              value={newUserData.repeatPassword}
+              onChange={accountChange}
+            />
             <button type="submit">Change Password</button>
             <button onClick={cancelSubmit}>Cancel</button>
           </form>

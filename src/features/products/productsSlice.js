@@ -18,7 +18,6 @@ export const fetchProducts = createAsyncThunk('products/getAll', async () => {
 export const addNewProduct = createAsyncThunk(
   'products/addNew',
   async (newProduct) => {
-    console.log(newProduct);
     const response = await axios.post(`${URL}new-product`, newProduct);
     return response.data;
   }
@@ -32,20 +31,20 @@ export const deleteProduct = createAsyncThunk('products/delete', async (id) => {
 });
 
 export const editProduct = createAsyncThunk(
-	'customer/edit',
-	async (dataToEdit, state) => {
-	  const { _id } = dataToEdit;
-	  const response = await axios.patch(`${URL}edit-product`, dataToEdit);
-	  return response.data;
-	}
-  );
+  'customer/edit',
+  async (dataToEdit, state) => {
+    const { _id } = dataToEdit;
+    const response = await axios.patch(`${URL}edit-product`, dataToEdit);
+    return response.data;
+  }
+);
 
 export const productsSlice = createSlice({
   name: 'products',
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(fetchProducts.pending, (state, action) => {
+      .addCase(fetchProducts.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
@@ -59,22 +58,27 @@ export const productsSlice = createSlice({
       })
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.products.unshift(action.payload);
+        state.status = 'succeeded';
       })
-      .addCase(deleteProduct.pending, (state, action) => {
+      .addCase(addNewProduct.rejected, (state) => {
+        state.status = 'rejected';
+      })
+      .addCase(deleteProduct.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products.splice(
-          state.products.findIndex(
-            (product) => product._id === action.payload
-          ),
-          1
+          state.products.findIndex((product) => product._id === action.payload)
         );
+        state.status = 'succeeded';
       })
-	  .addCase(editProduct.pending, (state, action) => {
+      .addCase(deleteProduct.rejected, (state) => {
+        state.status = 'rejected';
+      })
+      .addCase(editProduct.pending, (state) => {
         state.status = 'loading';
       })
-	  .addCase(editProduct.fulfilled, (state, action) => {
+      .addCase(editProduct.fulfilled, (state, action) => {
         // const { id } = action.payload;
         const updatedProduct = action.payload.result;
         state.status = 'succeeded';
@@ -83,6 +87,9 @@ export const productsSlice = createSlice({
           (element) => element._id === updatedProduct._id
         );
         state.products[index] = updatedProduct;
+      })
+      .addCase(editProduct.rejected, (state) => {
+        state.status = 'rejected';
       });
   },
 });

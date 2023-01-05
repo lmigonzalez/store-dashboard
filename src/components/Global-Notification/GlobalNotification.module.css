@@ -1,0 +1,47 @@
+.global_notification{
+	height: 2rem;
+	padding: 0 0.5rem;
+	background-color: #fff;
+	color: #222831;
+	font-size: 1rem;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	animation: noti 0.5s ease-in-out;
+}
+
+@keyframes noti {
+	0% {transform:  translateX(100%);}
+	100% {transform:  translateX(0%);}
+}
+
+.global_notification.positive{
+	border-left: 0.3rem var(--green) solid;
+}
+
+.global_notification.negative{
+	border-left: 0.3rem var(--red) solid;
+}
+
+.notification_icon{
+	display: flex;
+	align-items: center;
+	margin-right: 0.5rem;
+}
+
+
+.notification_icon svg:nth-of-type(1){
+	width: 1.5rem;
+	height: auto;
+	color: var(--green);
+
+}
+
+.notification_icon svg:nth-of-type(2){
+	width: 1.5rem;
+	height: auto;
+	color: var(--green);
+
+}

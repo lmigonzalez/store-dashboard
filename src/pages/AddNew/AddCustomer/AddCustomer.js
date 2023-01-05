@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import addCustomerStyles from './AddCustomer.module.css'
-import { useDispatch } from 'react-redux';
+import addCustomerStyles from './AddCustomer.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCustomersStatus } from '../../../features/customers/customersSlice';
+import { populateMessage } from '../../../features/notification/notification.Slice';
 import { addNewCustomer } from '../../../features/customers/customersSlice';
 import moment from 'moment';
 
 const AddCustomer = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const customerStatus = useSelector(getCustomersStatus);
+
   const customerInitialValues = {
     name: '',
     email: '',
@@ -18,8 +22,8 @@ const AddCustomer = () => {
   const [customerValues, setCustomerValues] = useState(customerInitialValues);
 
   const onCustomerChange = (e) => {
-    if(e.target.name === 'phone'){
-      parseInt(e.target.value)
+    if (e.target.name === 'phone') {
+      parseInt(e.target.value);
     }
     setCustomerValues({
       ...customerValues,
@@ -29,8 +33,27 @@ const AddCustomer = () => {
 
   const onCustomerSubmit = (e) => {
     e.preventDefault();
-    // console.log(customerValues);
-    dispatch(addNewCustomer(customerValues))
+    dispatch(addNewCustomer(customerValues));
+    console.log(customerStatus)
+    if (customerStatus === 'succeeded') {
+      dispatch(
+        populateMessage({
+          message: 'Customer added successfully',
+          messageStatus: true,
+          showNotification: true,
+        })
+      );
+    } else if (customerStatus === 'rejected') {
+      dispatch(
+        populateMessage({
+          message: "The customer wasn't added successfully",
+          messageStatus: false,
+          showNotification: true,
+        })
+      );
+    }
+
+    setCustomerValues(customerInitialValues);
   };
 
   return (

@@ -1,11 +1,14 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getOrdersStatus } from '../../features/orders/ordersSlice';
+import { populateMessage } from '../../features/notification/notification.Slice';
 import { deleteOrder } from '../../features/orders/ordersSlice';
 import orderDetailsStyles from './OrderDetails.module.css'
 import { AiFillDelete, AiFillCloseCircle } from "react-icons/ai";
 
 function OrderDetails({closeOrderDetails, orderSelectedData, bottom}) {
  const dispatch = useDispatch()
+ const orderStatus = useSelector(getOrdersStatus)
  const closeOrderDetailsTab = () =>{
   closeOrderDetails()
   // setOrderDetails(false)
@@ -14,6 +17,24 @@ function OrderDetails({closeOrderDetails, orderSelectedData, bottom}) {
  const onOrderDelete = () =>{
   let id = orderSelectedData.data._id
   dispatch(deleteOrder(id))
+  if(orderStatus === 'succeeded'){
+    dispatch(
+      populateMessage({
+        message: 'Order deleted successfully',
+        messageStatus: true,
+        showNotification: true,
+      })
+    );
+
+  }else if(orderStatus === 'rejected'){
+    dispatch(
+      populateMessage({
+        message: "The Order wasn't deleted successfully",
+        messageStatus: false,
+        showNotification: true,
+      })
+    );
+  }
   closeOrderDetails()
 
 }

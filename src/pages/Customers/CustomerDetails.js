@@ -28,50 +28,6 @@ function CustomerDetails() {
   const [tab, setTab] = useState(1);
   const [deleteCustomer, setDeleteCustomer] = useState(false);
   const [editCustomer, setEditCustomer] = useState(false);
-  const data = [
-    {
-      id: 1,
-      month: 'Jan',
-      sales: 1234,
-    },
-    {
-      id: 2,
-      month: 'Feb',
-      sales: 1454,
-    },
-    {
-      id: 3,
-      month: 'Mar',
-      sales: 1044,
-    },
-    {
-      id: 4,
-      month: 'Apr',
-      sales: 1104,
-    },
-    {
-      id: 5,
-      month: 'May',
-      sales: 1734,
-    },
-    {
-      id: 6,
-      month: 'Jun',
-      sales: 1587,
-    },
-  ];
-  const [sales, setSales] = useState({
-    labels: data.map((m) => m.month),
-    datasets: [
-      {
-        label: 'Sales',
-        data: data.map((s) => s.sales),
-        backgroundColor: ['white'],
-        borderColor: 'white',
-        tension: 0.1,
-      },
-    ],
-  });
 
   const [customerInformation, setCustomerInformation] = useState({});
   // const [date, setDate] = useState('');
@@ -104,7 +60,6 @@ function CustomerDetails() {
         selectedDays: selectedDays,
       })
       .then((res) => {
-        console.log(res.data);
         setCustomerData(res.data);
       })
       .catch((err) => {
@@ -249,7 +204,6 @@ function CustomerDetails() {
         percentage = customerData.totalOrders;
       }
 
-      console.log(percentage);
       return {
         isNumNegative,
         totalDifference: Math.abs(totalDifference),
@@ -308,7 +262,6 @@ function CustomerDetails() {
 
   let customerResume = getCustomerResume();
   let customerUnitsResume = getCustomerUnitsResume();
-  console.log(customerUnitsResume);
 
   return (
     <section className={customerDetailsStyles.graph_container}>

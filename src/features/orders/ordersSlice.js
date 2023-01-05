@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
 import axios from 'axios';
 
 const URL = 'http://localhost:3032/api/';
@@ -24,7 +23,6 @@ export const addNewOrder = createAsyncThunk(
 );
 
 export const deleteOrder = createAsyncThunk('orders/delete', async (id) => {
-
   const response = await axios.delete(`${URL}delete-order`, {
     data: { id },
   });
@@ -36,7 +34,7 @@ export const ordersSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(fetchOrders.pending, (state, action) => {
+      .addCase(fetchOrders.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
@@ -45,16 +43,20 @@ export const ordersSlice = createSlice({
         state.orders = loadedOrders;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = 'rejected';
         state.error = action.error.message;
       })
-      .addCase(addNewOrder.pending, (state, action) => {
+      .addCase(addNewOrder.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(addNewOrder.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.orders.push(action.payload);
       })
-      .addCase(deleteOrder.pending, (state, action) => {
+      .addCase(addNewOrder.rejected, (state) => {
+        state.status = 'rejected';
+      })
+      .addCase(deleteOrder.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(deleteOrder.fulfilled, (state, action) => {
@@ -63,7 +65,10 @@ export const ordersSlice = createSlice({
           1
         );
         state.status = 'succeeded';
-      });
+      })
+      .addCase(deleteOrder.rejected, (state) => {
+        state.status = 'rejected';
+      })
   },
 });
 

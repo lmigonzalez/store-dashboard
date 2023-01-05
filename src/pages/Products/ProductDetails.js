@@ -1,9 +1,9 @@
-import productDetailsStyles from './ProductDetails.module.css';
 import React, { useState, useEffect } from 'react';
+import productDetailsStyles from './ProductDetails.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 import { getProductsStatus } from '../../features/products/productsSlice';
+import { populateMessage } from '../../features/notification/notification.Slice';
 
 import axios from 'axios';
 import moment from 'moment';
@@ -269,7 +269,7 @@ const ProductDetails = () => {
       <div className={productDetailsStyles.graph_header}>
         <BackBtn />
         <div className={productDetailsStyles.graph_header_inf}>
-          <h2>{product.name}</h2>
+          <div>{product.name}</div>
           <div>
             {`FROM: ${startDate} - TO: ${moment().format('MMM DD YYYY')}`}
           </div>

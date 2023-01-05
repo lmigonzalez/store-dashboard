@@ -73,7 +73,7 @@ const Customers = () => {
   return (
     <section className={customersStyles.customers_container}>
       <div className={customersStyles.customers_header}>
-        <h2>Customers: {customersData.length}</h2>
+        <div>Customers: {customersData.length}</div>
       </div>
       <div className={customersStyles.search_container}>
         <div className={customersStyles.search_bar}>

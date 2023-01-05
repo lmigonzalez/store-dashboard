@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAllProducts } from '../../../features/products/productsSlice';
 import { selectAllCustomers } from '../../../features/customers/customersSlice';
 import { addNewOrder } from '../../../features/orders/ordersSlice';
+import { getOrdersStatus } from '../../../features/orders/ordersSlice';
+import { populateMessage } from '../../../features/notification/notification.Slice';
 import addOrderStyles from './AddOrder.module.css';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
@@ -48,6 +50,7 @@ const AddOrder = () => {
 
   const productNameSuggestionsValues = useSelector(selectAllProducts);
   const clientNameSuggestionsValues = useSelector(selectAllCustomers);
+  const orderStatus = useSelector(getOrdersStatus);
 
   const ordersInitial = {
     name: '',
@@ -69,11 +72,39 @@ const AddOrder = () => {
   const [selectedInput, setSelectedInput] = useState(-1);
 
   useEffect(() => {
-    if (orderValues.orders) {
-      dispatch(addNewOrder(orderValues));
-      console.log(orderValues);
+    const waitingForDispatch = async () => {
+      if (orderValues.orders) {
+        await dispatch(addNewOrder(orderValues));
+
+        setOrderValues(orderInitialValues);
+        setOrders([ordersInitial]);
+      }
+    };
+
+    if(orderValues.orders == undefined){
+      return
     }
-  }, [onOrderSubmit]);
+    if (orderStatus === 'succeeded') {
+      dispatch(
+        populateMessage({
+          message: 'You have completed the order successfully',
+          messageStatus: true,
+          showNotification: true,
+        })
+      );
+    }else if(orderStatus === 'rejected'){
+      dispatch(
+        populateMessage({
+          message: "Your order wasn't completed successfully",
+          messageStatus: false,
+          showNotification: true,
+        })
+      );
+    }
+
+    console.log(orderValues.orders)
+    waitingForDispatch();
+  }, [orderValues.orders]);
 
   const onOrderChange = (e) => {
     setOrderValues({
@@ -116,12 +147,13 @@ const AddOrder = () => {
       orders,
     });
 
-    setReceipt({
-      ...receipt,
-      orders,
-    });
+    // setReceipt({
+    //   ...receipt,
+    //   orders,
+    // });
 
-    setShowReceipt(!showReceipt);
+    console.log(orderStatus);
+    // setShowReceipt(!showReceipt);
   }
 
   const onOrderClientNameSuggestionSelected = (value) => {

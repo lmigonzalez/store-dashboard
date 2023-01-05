@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import addProductStyles from './AddProduct.module.css'
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProductsStatus } from '../../../features/products/productsSlice';
+import { populateMessage } from '../../../features/notification/notification.Slice';
 import { addNewProduct } from '../../../features/products/productsSlice';
 import moment from 'moment';
 
 const AddProduct = () => {
   const dispatch = useDispatch()
+  const productStatus = useSelector(getProductsStatus)
 
   const productInitialValues = {
     name: '',
-    quantity: 0,
-    price: 0,
+    quantity: '',
+    price: '',
     category: 'food',
     date: moment().format('YYYY-MM-DD'),
   };
@@ -26,8 +29,28 @@ const AddProduct = () => {
 
   const onProductSubmit = (e) => {
     e.preventDefault();
-    console.log(productValues)
+    productValues.quantity = parseInt(productValues.quantity)
+    productValues.price = parseFloat(productValues.price)
+
     dispatch(addNewProduct(productValues))
+    if(productStatus === 'succeeded'){
+      dispatch(
+        populateMessage({
+          message: 'Product added successfully',
+          messageStatus: true,
+          showNotification: true,
+        })
+      );
+    }else if(productStatus === 'rejected'){
+      dispatch(
+        populateMessage({
+          message: "The product wasn't added successfully",
+          messageStatus: false,
+          showNotification: true,
+        })
+      );
+    }
+    setProductValues(productInitialValues)
   };
 
   return (

@@ -1,86 +1,56 @@
-.customers_container{
-	margin: 0 2rem;
-	padding-bottom: 5rem;
-	/* height: 100vh; */
-	display: flex;
-	flex-direction: column;
-	/* background-color: blue; */
+.customers_container {
+  margin: 0 2rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
 }
-.customers_header{
-	min-height: 6.25rem;
-	display: flex;
-	justify-content:space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-	/* background-color: blue; */
+.customers_header {
+  min-height: 6.25rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
-
-.customers_header table{
-	width: 100%;
-	border: none;
-	font-size: 1.3rem;
+.customers_header div {
+  font-size: 1.3rem;
 }
 
-.customers_header td{
-	cursor: auto;
-	
+.search_container {
+  margin-bottom: 1rem;
 }
 
-.customers_header th{
-	border: none;
-	padding: 0;
-
+.search_bar {
+  display: flex;
+  align-items: center;
 }
 
-.customers_header tbody tr:last-child td{
-	border: none;
+.search_bar select {
+  height: 2.5rem;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  outline: none;
+  margin-right: 0.3rem;
+  padding: 0 0.3rem;
+  font-size: 1rem;
+  text-align: center;
 }
 
-.search_container{
-	/* background-color: blue; */
-	margin-bottom: 1rem;
-
+.search_bar input {
+  height: 2.5rem;
+  color: white;
+  border: 1px solid white;
+  background-color: transparent;
+  outline: none;
+  padding: 0 0.3rem;
+  font-size: 1rem;
 }
 
-.search_bar{
-	display: flex;
-	align-items: center;
-}
-
-
-.search_bar select{
-	height: 2.5rem;
-	border: 1px solid white;
-	background-color: transparent;
-	color: white;
-	outline: none;
-	margin-right: 0.3rem;
-	padding: 0 0.3rem;
-	font-size: 1rem;
-	text-align: center;
-}
-
-.search_bar input{
-	height: 2.5rem;
-	color: white;
-	border: 1px solid white;
-	background-color: transparent;
-	outline: none;
-	padding: 0 0.3rem;
-	font-size: 1rem;
-}
-
-
-
-.customers_body{
-	/* background-color: blue; */
-	width: 100%;
-	height: auto;
-	/* max-height: 100%; */
-	display: flex;
-	flex-direction: column;
-	background-color: var(--light-black);
-	padding: 0 1rem;
-	border-radius: 0.5rem;
-	/* overflow-y: scroll; */
+.customers_body {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--light-black);
+  padding: 0 1rem;
+  border-radius: 0.5rem;
 }

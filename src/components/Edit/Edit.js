@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-
-import { useDispatch } from 'react-redux';
+import {useSelector, useDispatch } from 'react-redux';
+import { getProductsStatus } from '../../features/products/productsSlice';
+import { getCustomersStatus } from '../../features/customers/customersSlice';
+import { populateMessage } from '../../features/notification/notification.Slice';
 import { editCustomer } from '../../features/customers/customersSlice';
 import {editProduct} from '../../features/products/productsSlice'
-import './Edit.css';
+import editStyles from './Edit.module.css';
 
 const Edit = ({ onCancel, component }) => {
 
   const dispatch = useDispatch()
+  const productStatus = useSelector(getProductsStatus)
+  const customerStatus = useSelector(getCustomersStatus)
   const [customerInformation, setCustomerInformation] = useState({});
   const [productInformation, setProductInformation] = useState({});
 
@@ -41,6 +45,26 @@ const Edit = ({ onCancel, component }) => {
     e.preventDefault();
       dispatch(editCustomer(customerInformation))
       localStorage.setItem('subjectName', JSON.stringify(customerInformation));
+
+
+      if(customerStatus === 'succeeded'){
+        dispatch(
+          populateMessage({
+            message: 'Customer updated successfully',
+            messageStatus: true,
+            showNotification: true,
+          })
+        );
+      }else if(customerStatus === 'rejected'){
+        dispatch(
+          populateMessage({
+            message: "Customer wasn't added successfully",
+            messageStatus: false,
+            showNotification: true,
+          })
+        );
+      }
+
     onCancel();
   };
 
@@ -48,6 +72,24 @@ const Edit = ({ onCancel, component }) => {
     e.preventDefault();
     dispatch(editProduct(productInformation))
     localStorage.setItem('subjectName', JSON.stringify(productInformation));
+
+    if(productStatus === 'succeeded'){
+      dispatch(
+        populateMessage({
+          message: 'Product updated successfully',
+          messageStatus: true,
+          showNotification: true,
+        })
+      );
+    }else if(productStatus === 'rejected'){
+      dispatch(
+        populateMessage({
+          message: "Product wasn't added successfully",
+          messageStatus: false,
+          showNotification: true,
+        })
+      );
+    }
     onCancel();
   };
 
@@ -55,8 +97,8 @@ const Edit = ({ onCancel, component }) => {
 
   const productToEdit = () => {
     return (
-      <div className="edit-container">
-        <div className="space-around" onClick={() => onCancel()}></div>
+      <div className={editStyles.edit_container}>
+        <div className={editStyles.space_around} onClick={() => onCancel()}></div>
         <form onSubmit={onProductSubmit}>
           <input type="text" placeholder="Product name" value={productInformation.name} name="name" onChange={onProductChange}/>
           <div>
@@ -67,18 +109,18 @@ const Edit = ({ onCancel, component }) => {
             name="category"
             value={productInformation.category}
             onChange={onProductChange}
-            className="edit-select"
+            className={editStyles.edit_select}
           >
             <option value="food">Food</option>
             <option value="drink">Drink</option>
             <option value="tobacco">Tobacco</option>
           </select>
-          <button className="add-btn" type="submit">
+          <button className={editStyles.add_btn} type="submit">
             Edit
           </button>
           <button
             type="button"
-            className="cancel-btn"
+            className={editStyles.cancel_btn}
             onClick={() => onCancel()}
           >
             Cancel
@@ -90,8 +132,8 @@ const Edit = ({ onCancel, component }) => {
 
   const customerToEdit = () => {
     return (
-      <div className="edit-container">
-        <div className="space-around" onClick={() => onCancel()}></div>
+      <div className={editStyles.edit_container}>
+        <div className={editStyles.space_around} onClick={() => onCancel()}></div>
         <form onSubmit={onCustomerSubmit}>
           <input
             type="text"
@@ -127,7 +169,7 @@ const Edit = ({ onCancel, component }) => {
             name="plan"
             value={customerInformation.plan}
             onChange={onCustomerChange}
-            className="edit-select"
+            className={editStyles.edit_select}
           >
             <option value="standard">Standard</option>
             <option value="premium">Premium</option>
@@ -140,12 +182,12 @@ const Edit = ({ onCancel, component }) => {
             name="date"
             onChange={onCustomerChange}
           />
-          <button className="add-btn" type="submit">
+          <button className={editStyles.add_btn} type="submit">
             Edit
           </button>
           <button
             type="button"
-            className="cancel-btn"
+            className={editStyles.cancel_btn}
             onClick={() => onCancel()}
           >
             Cancel

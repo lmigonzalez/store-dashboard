@@ -1,4 +1,4 @@
-.space-around {
+.space_around {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -14,7 +14,7 @@
 }
 
 
-.edit-container form {
+.edit_container form {
   width: 25rem;
   background-color: var(--dark-black);
   position: absolute;
@@ -31,7 +31,7 @@
   z-index: 10;
 }
 
-.edit-container form input {
+.edit_container form input {
   width: 100%;
   height: 2rem;
   margin: 0.5rem 0;
@@ -40,16 +40,16 @@
   padding: 0 0.5rem;
 }
 
-.edit-container form > div {
+.edit_container form > div {
   width: 100%;
   display: flex;
 }
 
-.edit-container form > div input:first-child {
+.edit_container form > div input:first-child {
   margin-right: 0.5rem;
 }
 
-.edit-container form button {
+.edit_container form button {
   width: 100%;
   height: 2rem;
   margin: 0.25rem 0;
@@ -58,19 +58,19 @@
   cursor: pointer;
 }
 
-.add-btn {
+.add_btn {
   background-color: var(--green);
   color: white;
   border-style: none;
 }
 
-.cancel-btn {
+.cancel_btn {
   background-color: transparent;
   border: 1px solid var(--red);
   color: white;
 }
 
-.edit-select{
+.edit_select{
   margin: 0.25rem 0;
   border-radius: 0.3rem;
   font-size: 1rem;
@@ -82,7 +82,7 @@
 	color: rgb(62, 61, 61);
 }
 
-.edit-select:hover{
+.edit_select:hover{
 	background-color: #fff!important;
 }
 

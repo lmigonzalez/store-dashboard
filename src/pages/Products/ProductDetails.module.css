@@ -13,6 +13,18 @@
   margin-bottom: 0.5rem;
 }
 
+.graph_header_inf{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.graph_header_inf div:nth-of-type(1){
+  font-size: 1.3rem;
+}
+
+
 .search_container {
   margin-bottom: 1rem;
 }
@@ -90,18 +102,18 @@
   padding: 1rem;
 }
 
-.graph_header {
+/* .graph_header {
   display: flex;
   align-items: center;
-}
+} */
 
-.graph_header_inf{
+/* .graph_header_inf{
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-}
+} */
 
 .products_options {
   display: flex;
